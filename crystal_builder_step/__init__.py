@@ -9,6 +9,7 @@ A step for building crystals in SEAMM
 # the crystal_builder_step package.
 
 from crystal_builder_step.crystal_builder import CrystalBuilder  # noqa: F401, E501
+from crystal_builder_step.crystal_builder_parameters import lattice_systems  # noqa: F401, E501
 from crystal_builder_step.crystal_builder_parameters import CrystalBuilderParameters  # noqa: F401, E501
 from crystal_builder_step.crystal_builder_step import CrystalBuilderStep  # noqa: F401, E501
 from crystal_builder_step.tk_crystal_builder import TkCrystalBuilder  # noqa: F401, E501

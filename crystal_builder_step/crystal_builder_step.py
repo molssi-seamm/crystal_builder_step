@@ -30,9 +30,9 @@ class CrystalBuilderStep(object):
     my_description = {
         'description':
             (
-                'An interface for Crystal Builder'
+                'An interface for the pyiron crystal builder'
             ),
-        'group': 'Simulations',
+        'group': 'Building',
         'name': 'Crystal Builder'
     }  # yapf: disable
 
@@ -72,7 +72,9 @@ class CrystalBuilderStep(object):
 
         """
 
-        return crystal_builder_step.CrystalBuilder(flowchart=flowchart, **kwargs)
+        return crystal_builder_step.CrystalBuilder(
+            flowchart=flowchart, **kwargs
+        )
 
     def create_tk_node(self, canvas=None, **kwargs):
         """Create and return the graphical Tk node object.

@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+
 """Non-graphical part of the Crystal Builder step in a SEAMM flowchart
 """
 
 import configargparse
 import logging
-import pprint
+# import os.path
+
+# import pyiron
+from pyiron.atomistics.structure.atoms import CrystalStructure
 
 import crystal_builder_step
 import seamm
@@ -58,11 +62,9 @@ class CrystalBuilder(seamm.Node):
     TkCrystalBuilder,
     CrystalBuilder, CrystalBuilderParameters
     """
+
     def __init__(
-        self,
-        flowchart=None,
-        title='Crystal Builder',
-        extension=None
+        self, flowchart=None, title='Crystal Builder', extension=None
     ):
         """A step for Crystal Builder in a SEAMM flowchart.
 
@@ -154,10 +156,17 @@ class CrystalBuilder(seamm.Node):
         if not P:
             P = self.parameters.values_to_dict()
 
-        text = (
-            'Please replace this with a short summary of the '
-            'Crystal Builder step, including key parameters.'
-        )
+        system = P['lattice system']
+        if system == 'cubic':
+            text = (
+                'Build a {lattice} cubic system of {element} with a lattice '
+                'parameter of {a}'
+            )
+        elif system == 'hexagonal':
+            text = (
+                'Build a {lattice} hexagonal system of {element} with lattice '
+                'parameters a = {a} and c = {c}'
+            )
 
         return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
@@ -181,17 +190,54 @@ class CrystalBuilder(seamm.Node):
         # Print what we are doing
         printer.important(__(self.description_text(P), indent=self.indent))
 
-        # Temporary code just to print the parameters. You will need to change
-        # this!
-        for key in P:
-            print('{:>15s} = {}'.format(key, P[key]))
-            printer.normal(__(
-                '{key:>15s} = {value}', key=key, value=P[key],
-                indent=4*' ', wrap=False, dedent=False)
-            )
+        # Create the system
+        system = P['lattice system']
+        lattice_system = crystal_builder_step.lattice_systems[system]
+        parameters = []
+        tmp_cell = {}
+        for parameter in lattice_system['parameters']:
+            if parameter in ('a', 'b', 'c'):
+                value = P[parameter].to('Å').magnitude
+            else:
+                value = P[parameter].to('degree').magnitude
+            parameters.append(value)
+            tmp_cell[parameter] = value
+
+        # directory = os.path.expanduser('~/pyiron/projects/structures')
+        # pr = pyiron.Project(path=directory)
+        # structure = pr.create_structure(
+        structure = CrystalStructure(
+            P['element'],
+            bravais_lattice=system,
+            bravais_basis=P['lattice'],
+            lattice_constants=parameters
+        )
+
+        system = seamm.data.structure = {}
+        system['periodicity'] = 3
+        units = system['units'] = {}
+        units['coordinates'] = 'angstrom'
+
+        # Fill out the cell information
+        cell = []
+        for parameter in lattice_system['cell']:
+            if isinstance(parameter, str):
+                cell.append(tmp_cell[parameter])
+            else:
+                cell.append(parameter)
+        system['cell'] = cell
+
+        # And the atoms
+        atoms = system['atoms'] = {}
+        atoms['coordinates'] = list(structure.positions)
+        n_atoms = len(atoms['coordinates'])
+        atoms['elements'] = [P['element']] * n_atoms
+
+        # No bonds
+        system['bonds'] = []
 
         # Analyze the results
-        self.analyze()
+        # self.analyze()
 
         return next_node
 
@@ -206,8 +252,12 @@ class CrystalBuilder(seamm.Node):
             indent: str
                 An extra indentation for the output
         """
-        printer.normal(__(
-            'This is a placeholder for the results from the '
-            'Crystal Builder step', indent=4*' ', wrap=True,
-            dedent=False
-        ))
+        printer.normal(
+            __(
+                'This is a placeholder for the results from the '
+                'Crystal Builder step',
+                indent=4 * ' ',
+                wrap=True,
+                dedent=False
+            )
+        )

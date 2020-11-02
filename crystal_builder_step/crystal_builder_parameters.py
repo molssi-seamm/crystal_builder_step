@@ -10,6 +10,50 @@ import pprint  # noqa: F401
 logger = logging.getLogger(__name__)
 
 
+lattice_systems = {
+    "cubic": {
+        'lattices': ["fcc", "bcc", "primitive"],
+        'parameters': ['a'],
+        'cell': ['a', 'a', 'a', 90.0, 90.0, 90.0]
+    },
+    "hexagonal": {
+        'lattices': ["primitive", "hcp"],
+        'parameters': ['a', 'c'],
+        'cell': ['a', 'a', 'c', 90.0, 90.0, 120.0]
+    },
+    "rhombohedral": {
+        'lattices': ["primitive"],
+        'parameters': ['a', 'alpha'],
+        'cell': ['a', 'a', 'a', 'alpha', 'alpha', 'alpha']
+    },
+    "tetragonal": {
+        'lattices': ["primitive", "body-centered"],
+        'parameters': ['a', 'c'],
+        'cell': ['a', 'a', 'c', 90.0, 90.0, 90.0]
+    },
+    "orthorombic": {
+        'lattices': [
+            "primitive",
+            "body-centered",
+            "base-centered",
+            "face-centered",
+        ],
+        'parameters': ['a', 'b', 'c'],
+        'cell': ['a', 'b', 'c', 90.0, 90.0, 90.0]
+    },
+    "monoclinic": {
+        'lattices': ["primitive", "base-centered"],
+        'parameters': ['a', 'b', 'c', 'beta'],
+        'cell': ['a', 'b', 'c', 90.0, 'beta', 90.0]
+    },
+    "triclinic": {
+        'lattices': ["primitive"],
+        'parameters': ['a', 'b', 'c', 'alpha', 'beta', 'gamma'],
+        'cell': ['a', 'b', 'c', 'alpha', 'beta', 'gamma']
+    },
+}
+
+
 class CrystalBuilderParameters(seamm.Parameters):
     """
     The control parameters for Crystal Builder.
@@ -78,14 +122,86 @@ class CrystalBuilderParameters(seamm.Parameters):
     """
 
     parameters = {
-        "time": {
-            "default": 100.0,
-            "kind": "float",
-            "default_units": "ps",
+        "element": {
+            "default": 'Al',
+            "kind": "string",
+            "default_units": None,
             "enumeration": tuple(),
+            "format_string": "",
+            "description": "Element:",
+            "help_text": ("The element.")
+        },
+        "lattice system": {
+            "default": 'cubic',
+            "kind": "enumeration",
+            "default_units": None,
+            "enumeration": tuple(lattice_systems.keys()),
+            "format_string": "",
+            "description": "Lattice system:",
+            "help_text": ("The lattice system of the structure..")
+        },
+        "lattice": {
+            "default": 'fcc',
+            "kind": "enumeration",
+            "default_units": None,
+            "enumeration": tuple(lattice_systems['cubic']['lattices']),
+            "format_string": "",
+            "description": "Bravais lattice:",
+            "help_text": ("The Bravais lattice of the structure..")
+        },
+        "a": {
+            "default": 10.0,
+            "kind": "float",
+            "default_units": "Å",
+            "enumeration": None,
+            "format_string": ".2f",
+            "description": "a:",
+            "help_text": ("The length of the first side of the cell.")
+        },
+        "b": {
+            "default": 10.0,
+            "kind": "float",
+            "default_units": "Å",
+            "enumeration": None,
+            "format_string": ".2f",
+            "description": "b:",
+            "help_text": ("The length of the second side of the cell.")
+        },
+        "c": {
+            "default": 10.0,
+            "kind": "float",
+            "default_units": "Å",
+            "enumeration": None,
+            "format_string": ".2f",
+            "description": "c:",
+            "help_text": ("The length of the third side of the cell.")
+        },
+        "alpha": {
+            "default": 90.0,
+            "kind": "float",
+            "default_units": "degree",
+            "enumeration": None,
             "format_string": ".1f",
-            "description": "Simulation time:",
-            "help_text": ("The time to simulate in the dynamics run.")
+            "description": "alpha:",
+            "help_text": ("The angle between a and b.")
+        },
+        "beta": {
+            "default": 90.0,
+            "kind": "float",
+            "default_units": "degree",
+            "enumeration": None,
+            "format_string": ".1f",
+            "description": "beta:",
+            "help_text": ("The angle between a and c.")
+        },
+        "gamma": {
+            "default": 90.0,
+            "kind": "float",
+            "default_units": "degree",
+            "enumeration": None,
+            "format_string": ".1f",
+            "description": "gamma:",
+            "help_text": ("The angle between b and c.")
         },
     }
 

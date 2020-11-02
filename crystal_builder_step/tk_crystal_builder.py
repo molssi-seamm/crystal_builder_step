@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """The graphical part of a Crystal Builder step"""
 
 import seamm
