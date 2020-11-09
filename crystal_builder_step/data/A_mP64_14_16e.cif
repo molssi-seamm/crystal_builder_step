@@ -14,7 +14,6 @@ _journal_name_full
 ;
 Journal of the Chemical Society, Chemical Communications
 ;
-_journal_volume
 _journal_year 1977
 _journal_page_first 834
 _journal_page_last 835

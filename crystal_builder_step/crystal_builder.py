@@ -3,16 +3,18 @@
 """Non-graphical part of the Crystal Builder step in a SEAMM flowchart
 """
 
-import configargparse
+import calendar
+try:
+    import importlib.metadata as implib
+except Exception:
+    import importlib_metadata as implib
 import logging
-# import os.path
-
-# import pyiron
-from pyiron.atomistics.structure.atoms import CrystalStructure
+import pprint
+import string
+import traceback
 
 import crystal_builder_step
 import seamm
-from seamm import data  # noqa: F401
 from seamm_util import ureg, Q_  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
@@ -28,14 +30,6 @@ from seamm_util.printing import FormattedText as __
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter('Crystal Builder')
-
-
-def upcase(string):
-    """Return an uppercase version of the string.
-
-    Used for the type argument in argparse
-    """
-    return string.upper()
 
 
 class CrystalBuilder(seamm.Node):
@@ -83,45 +77,11 @@ class CrystalBuilder(seamm.Node):
         """
         logger.debug('Creating Crystal Builder {}'.format(self))
 
-        # Argument/config parsing
-        self.parser = configargparse.ArgParser(
-            auto_env_var_prefix='',
-            default_config_files=[
-                '/etc/seamm/crystal_builder_step.ini',
-                '/etc/seamm/seamm.ini',
-                '~/.seamm/crystal_builder_step.ini',
-                '~/.seamm/seamm.ini',
-            ]
-        )
-
-        self.parser.add_argument(
-            '--seamm-configfile',
-            is_config_file=True,
-            default=None,
-            help='a configuration file to override others'
-        )
-
-        # Options for this plugin
-        self.parser.add_argument(
-            "--crystal-builder-step-log-level",
-            default=configargparse.SUPPRESS,
-            choices=[
-                'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'
-            ],
-            type=upcase,
-            help="the logging level for the Crystal Builder step"
-        )
-
-        self.options, self.unknown = self.parser.parse_known_args()
-
-        # Set the logging level for this module if requested
-        if 'crystal_builder_step_log_level' in self.options:
-            logger.setLevel(self.options.crystal_builder_step_log_level)
-
         super().__init__(
             flowchart=flowchart,
             title='Crystal Builder',
-            extension=extension
+            extension=extension,
+            logger=logger
         )  # yapf: disable
 
         self.parameters = crystal_builder_step.CrystalBuilderParameters()
@@ -156,17 +116,56 @@ class CrystalBuilder(seamm.Node):
         if not P:
             P = self.parameters.values_to_dict()
 
-        system = P['lattice system']
-        if system == 'cubic':
+        aflow_prototype = P['AFLOW prototype']
+        data = crystal_builder_step.prototype_data[aflow_prototype]
+
+        cell = data['cell']
+        sites = data['sites']
+        is_common = False
+        for prototype, aflow in crystal_builder_step.common_prototypes.items():
+            if aflow == aflow_prototype:
+                is_common = True
+                break
+
+        if is_common:
+            text = "Building a {prototype} system"
+        elif data['strukturbericht'] is not None:
             text = (
-                'Build a {lattice} cubic system of {element} with a lattice '
-                'parameter of {a}'
+                'Building a system with the Struktubericht designation: '
+                f"{data['strukturbericht']}"
             )
-        elif system == 'hexagonal':
+        else:
             text = (
-                'Build a {lattice} hexagonal system of {element} with lattice '
-                'parameters a = {a} and c = {c}'
+                f'Building a system with the AFLOW prototype {aflow_prototype}'
             )
+
+        text += '\n'
+
+        text += f"\n            exemplar structure: {data['prototype']}"
+        text += f"\n                         notes: {data['description']}"
+        text += f"\n                Pearson symbol: {data['pearson_symbol']}"
+        if data['strukturbericht'] is not None:
+            text += (
+                f"\n   Strukturbericht designation: {data['strukturbericht']}"
+            )
+        text += f"\n               number of atoms: {data['n_atoms']}"
+        text += f"\n               AFLOW prototype: {aflow_prototype}"
+        text += '\n'
+
+        label = 'cell'
+        for name, param0 in cell:
+            value = P[name]
+            text += f'\n                    {label:4} {name:>5}: {value}'
+            label = ' '
+
+        text += '\n'
+
+        label = 'sites'
+        for site_data, symbol in zip(sites, P['elements']):
+            site, mult, _ = site_data
+            site = f'{mult}{site}'
+            text += f'\n                   {label:6} {site:>4}: {symbol}'
+            label = ' '
 
         return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
@@ -182,62 +181,138 @@ class CrystalBuilder(seamm.Node):
         """
 
         next_node = super().run(printer)
+
+        # Get the system
+        system = self.get_variable('_system')
+
         # Get the values of the parameters, dereferencing any variables
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
+        self.logger.debug(f'Dereferenced values:\n{pprint.pformat(P)}')
 
-        # Print what we are doing
-        printer.important(__(self.description_text(P), indent=self.indent))
-
-        # Create the system
-        system = P['lattice system']
-        lattice_system = crystal_builder_step.lattice_systems[system]
-        parameters = []
-        tmp_cell = {}
-        for parameter in lattice_system['parameters']:
-            if parameter in ('a', 'b', 'c'):
-                value = P[parameter].to('Å').magnitude
-            else:
-                value = P[parameter].to('degree').magnitude
-            parameters.append(value)
-            tmp_cell[parameter] = value
-
-        # directory = os.path.expanduser('~/pyiron/projects/structures')
-        # pr = pyiron.Project(path=directory)
-        # structure = pr.create_structure(
-        structure = CrystalStructure(
-            P['element'],
-            bravais_lattice=system,
-            bravais_basis=P['lattice'],
-            lattice_constants=parameters
+        # Print what we are doing -- getting formatted values for printing
+        PP = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data,
+            formatted=True,
+            units=False
         )
+        self.logger.debug(f'Formatted values:\n{pprint.pformat(PP)}')
+        printer.important(__(self.description_text(PP), indent=self.indent))
 
-        system = seamm.data.structure = {}
-        system['periodicity'] = 3
-        units = system['units'] = {}
-        units['coordinates'] = 'angstrom'
+        # Create the system from the cif file for the prototype
+        aflow_prototype = P['AFLOW prototype']
 
-        # Fill out the cell information
-        cell = []
-        for parameter in lattice_system['cell']:
-            if isinstance(parameter, str):
-                cell.append(tmp_cell[parameter])
+        package = self.__module__.split('.')[0]
+        files = [p for p in implib.files(package) if aflow_prototype in str(p)]
+        if len(files) > 0:
+            path = files[0]
+            data = path.read_text()
+            system.from_cif_text(data)
+
+        # Now set the cell parameters. If unmentioned the lattice parameters
+        # get the previous value, e.g. a, a, c. The angles are those of the
+        # prototype if not mentioned.
+        a0, b0, c0, alpha0, beta0, gamma0 = system.cell.cell().parameters
+
+        data = crystal_builder_step.prototype_data[aflow_prototype]
+        cell = data['cell']
+        sites = data['sites']
+
+        tmp = {
+            'a': None,
+            'b': None,
+            'c': None,
+            'alpha': alpha0,
+            'beta': beta0,
+            'gamma': gamma0
+        }
+        tmp0 = {**tmp}
+        i = 0
+        for name, param0 in cell:
+            tmp0[name] = param0
+            i += 1
+            if name in ('a', 'b', 'c'):
+                tmp[name] = P[name].to('Å').magnitude
             else:
-                cell.append(parameter)
-        system['cell'] = cell
+                tmp[name] = P[name].to('degree')
+            # Fill in any that were skipped ...
+        last = None
+        new_cell = []
+        for name, param in tmp.items():
+            if param is not None:
+                last = param
+            new_cell.append(last)
 
-        # And the atoms
-        atoms = system['atoms'] = {}
-        atoms['coordinates'] = list(structure.positions)
-        n_atoms = len(atoms['coordinates'])
-        atoms['elements'] = [P['element']] * n_atoms
+        self.logger.debug(f'cell = {new_cell}')
+        system.cell.set_cell(new_cell)
 
-        # No bonds
-        system['bonds'] = []
+        # And the elements for the sites. Not that symmetry has been lowered
+        # to P1
+        symbols = []
+        for site_data, symbol in zip(sites, P['elements']):
+            site, mult, symbol0 = site_data
+            symbols.extend([symbol] * mult)
+        self.logger.debug(f'symbols = {symbols}')
+        atnos = system.atoms.to_atnos(symbols)
+        column = system.atoms.get_column('atno')
+        column[0:] = atnos
 
         # Analyze the results
         # self.analyze()
+
+        # Add a citation for this plug-in
+        try:
+            template = string.Template(
+                self._bibliography['crystal_builder_step']
+            )
+
+            version = crystal_builder_step.__version__
+            year, month = version.split('.')[0:2]
+            month = calendar.month_abbr[int(month)].lower()
+            citation = template.substitute(
+                month=month, version=version, year=year
+            )
+
+            self.references.cite(
+                raw=citation,
+                alias='crystal_builder_step',
+                module='crystal_builder_step',
+                level=2,
+                note=(
+                    'The principle citation for the Crystal Builder step in '
+                    'SEAMM.'
+                )
+            )
+
+        except Exception as e:
+            printer.important(f'Exception in citation {type(e)}: {e}')
+            printer.important(traceback.format_exc())
+
+        # Requested citations for the AFLOW protoype library
+        self.references.cite(
+            raw=self._bibliography['MEHL2017S1'],
+            alias='MEHL2017S1',
+            module='crystal_builder_step',
+            level=1,
+            note='Citation for the AFLOW library of prototype, part 1.'
+        )
+        self.references.cite(
+            raw=self._bibliography['HICKS2019S1'],
+            alias='HICKS2019S1',
+            module='crystal_builder_step',
+            level=1,
+            note='Citation for the AFLOW library of prototype, part 2.'
+        )
+
+        # And citation for the structure itself:
+        self.references.cite(
+            raw=self._bibliography[aflow_prototype],
+            alias=aflow_prototype,
+            module='crystal_builder_step',
+            level=1,
+            note='Citation for the crystal strcuture of the prototype'
+        )
 
         return next_node
 

@@ -15,7 +15,6 @@ _journal_name_full_name
 ;
  Journal of the Chemical Society A
 ;
-_journal_volume 
 _journal_year 1967
 _journal_page_first 1038
 _journal_page_last 1045
