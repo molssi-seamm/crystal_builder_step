@@ -3,15 +3,12 @@
 """Non-graphical part of the Crystal Builder step in a SEAMM flowchart
 """
 
-import calendar
 try:
     import importlib.metadata as implib
 except Exception:
     import importlib_metadata as implib
 import logging
 import pprint
-import string
-import traceback
 
 import crystal_builder_step
 import seamm
@@ -260,34 +257,6 @@ class CrystalBuilder(seamm.Node):
 
         # Analyze the results
         # self.analyze()
-
-        # Add a citation for this plug-in
-        try:
-            template = string.Template(
-                self._bibliography['crystal_builder_step']
-            )
-
-            version = crystal_builder_step.__version__
-            year, month = version.split('.')[0:2]
-            month = calendar.month_abbr[int(month)].lower()
-            citation = template.substitute(
-                month=month, version=version, year=year
-            )
-
-            self.references.cite(
-                raw=citation,
-                alias='crystal_builder_step',
-                module='crystal_builder_step',
-                level=2,
-                note=(
-                    'The principle citation for the Crystal Builder step in '
-                    'SEAMM.'
-                )
-            )
-
-        except Exception as e:
-            printer.important(f'Exception in citation {type(e)}: {e}')
-            printer.important(traceback.format_exc())
 
         # Requested citations for the AFLOW protoype library
         self.references.cite(
