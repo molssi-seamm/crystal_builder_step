@@ -249,14 +249,13 @@ class CrystalBuilder(seamm.Node):
         symbols = []
         for site_data, symbol in zip(sites, P['elements']):
             site, mult, symbol0 = site_data
+            if self.is_expr(symbol):
+                symbol = self.get_variable(symbol)
             symbols.extend([symbol] * mult)
         self.logger.debug(f'symbols = {symbols}')
         atnos = system.atoms.to_atnos(symbols)
         column = system.atoms.get_column('atno')
         column[0:] = atnos
-
-        # Analyze the results
-        # self.analyze()
 
         # Requested citations for the AFLOW protoype library
         self.references.cite(
@@ -284,24 +283,3 @@ class CrystalBuilder(seamm.Node):
         )
 
         return next_node
-
-    def analyze(self, indent='', **kwargs):
-        """Do any analysis of the output from this step.
-
-        Also print important results to the local step.out file using
-        'printer'.
-
-        Parameters
-        ----------
-            indent: str
-                An extra indentation for the output
-        """
-        printer.normal(
-            __(
-                'This is a placeholder for the results from the '
-                'Crystal Builder step',
-                indent=4 * ' ',
-                wrap=True,
-                dedent=False
-            )
-        )
