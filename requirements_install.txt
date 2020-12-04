@@ -1,4 +1,4 @@
-Pmw
+pycifrw
 seamm
 seamm-util
 seamm-widgets

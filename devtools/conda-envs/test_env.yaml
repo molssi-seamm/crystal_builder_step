@@ -1,15 +1,30 @@
 name: test
+
 channels:
+  - conda-forge
+
 dependencies:
-    # Base depends
+  # Base depends
   - python
   - pip
 
-    # Testing
+  # molsystem requires, and only available via Conda.
+  - openbabel
+
+  # Testing
+  - codecov
+  - flake8
   - pytest
   - pytest-cov
 
-    # Pip-only installs
+
+  # Pip-only installs
   - pip:
-    - codecov
+    - pycifrw
+    - seamm
+    - seamm-util
+    - seamm-widgets
+
+    # Testing
+    - yapf
 
