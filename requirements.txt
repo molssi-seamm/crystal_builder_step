@@ -1,4 +1,4 @@
-Pmw
-seamm
-seamm-util
-seamm-widgets
+pycifrw==4.4.1
+seamm==2020.12.4
+seamm-util==2020.12.2
+seamm-widgets==2020.12.3

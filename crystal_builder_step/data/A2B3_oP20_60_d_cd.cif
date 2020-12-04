@@ -10,6 +10,7 @@ _publ_author_name
  'E. Parth\'{e}'
  'F. Hulliger'
 _journal_name_full_name
+;
 Acta Crystallographica
 ;
 _journal_volume 21

@@ -122,32 +122,50 @@ class CrystalBuilderParameters(seamm.Parameters):
     """
 
     parameters = {
-        "element": {
-            "default": 'Al',
+        "prototype_group": {
+            "default": 'common',
+            "kind": "enumeration",
+            "default_units": None,
+            "enumeration": ('common', 'Strukturbericht', 'all'),
+            "format_string": "",
+            "description": "Which prototypes:",
+            "help_text": ("The group of prototypes to display")
+        },
+        "n_sites": {
+            "default": 'any',
+            "kind": "int",
+            "default_units": None,
+            "enumeration": ('any',),
+            "format_string": "",
+            "description": "Number of occupied sites:",
+            "help_text": ("The number of occupied sites in the structure.")
+        },
+        "prototype": {
+            "default": "",
+            "kind": "enumeration",
+            "default_units": None,
+            "enumeration": ('place', 'holders'),
+            "format_string": "",
+            "description": "Prototype:",
+            "help_text": ("The prototype to use")
+        },
+        "AFLOW prototype": {
+            "default": "",
             "kind": "string",
             "default_units": None,
             "enumeration": tuple(),
             "format_string": "",
-            "description": "Element:",
-            "help_text": ("The element.")
+            "description": "AFLOW Prototype:",
+            "help_text": ("The AFLOW prototype")
         },
-        "lattice system": {
-            "default": 'cubic',
-            "kind": "enumeration",
+        "elements": {
+            "default": ['Al'],
+            "kind": "list",
             "default_units": None,
-            "enumeration": tuple(lattice_systems.keys()),
+            "enumeration": tuple(),
             "format_string": "",
-            "description": "Lattice system:",
-            "help_text": ("The lattice system of the structure..")
-        },
-        "lattice": {
-            "default": 'fcc',
-            "kind": "enumeration",
-            "default_units": None,
-            "enumeration": tuple(lattice_systems['cubic']['lattices']),
-            "format_string": "",
-            "description": "Bravais lattice:",
-            "help_text": ("The Bravais lattice of the structure..")
+            "description": "Elements:",
+            "help_text": ("The elements at the different sites.")
         },
         "a": {
             "default": 10.0,

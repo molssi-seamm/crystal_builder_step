@@ -1,5 +1,4 @@
 # CIF file
-_chemical_name_mineral 'Sheldrickite'
 
 data_findsym-output
 _audit_creation_method FINDSYM

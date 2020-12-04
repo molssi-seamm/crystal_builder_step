@@ -2,14 +2,14 @@
 
 """The graphical part of a Crystal Builder step"""
 
+import pprint  # noqa: F401
+import tkinter as tk
+import tkinter.ttk as ttk
+
 import seamm
 from seamm_util import ureg, Q_, units_class  # noqa: F401
 import seamm_widgets as sw
 import crystal_builder_step  # noqa: F401
-import Pmw
-import pprint  # noqa: F401
-import tkinter as tk
-import tkinter.ttk as ttk
 
 
 class TkCrystalBuilder(seamm.TkNode):
@@ -69,6 +69,8 @@ class TkCrystalBuilder(seamm.TkNode):
             The nodes graphical height, in pixels.
         """
         self.dialog = None
+        self._in_reset = False
+        self._last_prototype = None
 
         super().__init__(
             tk_flowchart=tk_flowchart,
@@ -91,29 +93,61 @@ class TkCrystalBuilder(seamm.TkNode):
         TkCrystalBuilder.reset_dialog
         """
 
-        self.dialog = Pmw.Dialog(
-            self.toplevel,
-            buttons=('OK', 'Help', 'Cancel'),
-            defaultbutton='OK',
-            master=self.toplevel,
-            title='Edit Crystal Builder step',
-            command=self.handle_dialog
-        )
-        self.dialog.withdraw()
+        frame = super().create_dialog(title='Crystal Builder')
 
-        # The information about widgets is held in self['xxxx'], i.e. this
-        # class is in part a dictionary of widgets. This makes accessing
-        # the widgets easier and allows loops, etc.
-
-        # Create a frame to hold everything. This is always called 'frame'.
-        self['frame'] = ttk.Frame(self.dialog.interior())
-        self['frame'].pack(expand=tk.YES, fill=tk.BOTH)
         # Shortcut for parameters
         P = self.node.parameters
 
+        # Create the frames for cell and atom sites
+        cell_frame = self['cell_frame'] = ttk.LabelFrame(
+            self['frame'],
+            borderwidth=4,
+            relief='sunken',
+            text='Cell',
+            labelanchor='n',
+            padding=10
+        )
+        self['site_frame'] = ttk.LabelFrame(
+            self['frame'],
+            borderwidth=4,
+            relief='sunken',
+            text='Atom Sites',
+            labelanchor='n',
+            padding=10
+        )
+
         # The create the widgets
-        for key in P:
-            self[key] = P[key].widget(self['frame'])
+        for key in ('prototype_group', 'n_sites', 'prototype'):
+            self[key] = P[key].widget(frame)
+        for key in ('a', 'b', 'c', 'alpha', 'beta', 'gamma'):
+            self[key] = P[key].widget(cell_frame)
+
+        # And the sites for the current elements
+        i = 0
+        for symbol in P['elements'].get():
+            i += 1
+            key = f'site {i}'
+            self[key] = sw.LabeledEntry(self['site_frame'], labeltext=key)
+            self[key].set(symbol)
+
+        # Setup bindings
+        self['prototype_group'].combobox.bind(
+            "<<ComboboxSelected>>", self.reset_dialog
+        )
+        self['prototype_group'].combobox.bind("<Return>", self.reset_dialog)
+        self['prototype_group'].combobox.bind("<FocusOut>", self.reset_dialog)
+
+        self['n_sites'].combobox.bind(
+            "<<ComboboxSelected>>", self.reset_dialog
+        )
+        self['n_sites'].combobox.bind("<Return>", self.reset_dialog)
+        self['n_sites'].combobox.bind("<FocusOut>", self.reset_dialog)
+
+        self['prototype'].combobox.bind(
+            "<<ComboboxSelected>>", self.reset_dialog
+        )
+        self['prototype'].combobox.bind("<Return>", self.reset_dialog)
+        self['prototype'].combobox.bind("<FocusOut>", self.reset_dialog)
 
         # and lay them out
         self.reset_dialog()
@@ -136,26 +170,140 @@ class TkCrystalBuilder(seamm.TkNode):
         --------
         TkCrystalBuilder.create_dialog
         """
+        if self._in_reset:
+            return
+        self._in_reset = True
 
         # Remove any widgets previously packed
         frame = self['frame']
         for slave in frame.grid_slaves():
             slave.grid_forget()
+        for slave in self['cell_frame'].grid_slaves():
+            slave.grid_forget()
+        for slave in self['site_frame'].grid_slaves():
+            slave.grid_forget()
 
-        # Shortcut for parameters
-        P = self.node.parameters
+        prototype_group = self['prototype_group'].get()
+        n_sites = self['n_sites'].get()
+        prototype = self['prototype'].get()
+
+        self._tmp = {}
+        cb_prototypes = crystal_builder_step.prototypes
+        if prototype_group == 'common':
+            prototypes = [*crystal_builder_step.common_prototypes]
+            self._tmp = {
+                p: v for p, v in crystal_builder_step.common_prototypes.items()
+            }
+            self['prototype'].combobox.config(values=prototypes)
+        elif prototype_group == 'Strukturbericht':
+            prototypes = []
+            for n_proto_sites, struk, proto, description, aflow in zip(
+                    cb_prototypes['n_sites'],
+                    cb_prototypes['Strukturbericht designation'],
+                    cb_prototypes['prototype'],
+                    cb_prototypes['notes'],
+                    cb_prototypes['AFLOW prototype']
+            ):  # yapf: disable
+                if struk is not None:
+                    if n_sites == 'any' or n_proto_sites == int(n_sites):
+                        key = f'{struk}: {proto}: {description}'
+                        prototypes.append(key)
+                        self._tmp[key] = aflow
+        else:
+            prototypes = []
+            for n_proto_sites, proto, description, aflow in zip(
+                    cb_prototypes['n_sites'],
+                    cb_prototypes['prototype'],
+                    cb_prototypes['notes'],
+                    cb_prototypes['AFLOW prototype']
+            ):  # yapf: disable
+                if n_sites == 'any' or n_proto_sites == int(n_sites):
+                    key = f'{proto}: {description}'
+                    prototypes.append(key)
+                    self._tmp[key] = aflow
+        prototypes.sort()
+        self['prototype'].combobox.config(values=prototypes)
+        if len(prototypes) == 0:
+            width = 300
+        else:
+            width = max(len(x) for x in prototypes) + 5
+        self['prototype'].config(width=width)
+        if prototype in prototypes:
+            self['prototype'].set(prototype)
+        else:
+            self['prototype'].combobox.current(0)
+            prototype = self['prototype'].get()
+        self._tmp['AFLOW prototype'] = self._tmp[prototype]
 
         # keep track of the row in a variable, so that the layout is flexible
         # if e.g. rows are skipped to control such as 'method' here
         row = 0
         widgets = []
-        for key in P:
-            self[key].grid(row=row, column=0, sticky=tk.EW)
-            widgets.append(self[key])
+
+        self['prototype_group'].grid(row=row, column=0, sticky=tk.EW)
+        widgets.append(self['prototype_group'])
+        row += 1
+
+        if prototype_group != 'common':
+            self['n_sites'].grid(row=row, column=0, sticky=tk.EW)
+            widgets.append(self['n_sites'])
             row += 1
+
+        self['prototype'].grid(row=row, column=0, sticky=tk.EW)
+        widgets.append(self['prototype'])
+        row += 1
 
         # Align the labels
         sw.align_labels(widgets)
+
+        # And now the cell parameters
+        self['cell_frame'].grid(row=row, column=0, sticky=tk.EW)
+        row += 1
+
+        aflow_prototype = self._tmp[prototype]
+        cb_data = crystal_builder_step.prototype_data[aflow_prototype]
+        cell_data = cb_data['cell']
+        site_data = cb_data['sites']
+
+        subrow = 0
+        widgets = []
+        for parameter, value in cell_data:
+            w = self[parameter]
+            w.grid(row=subrow, sticky=tk.EW)
+            subrow += 1
+            if aflow_prototype != self._last_prototype:
+                w.set(value)
+            widgets.append(w)
+        sw.align_labels(widgets)
+
+        # And the sites
+        self['site_frame'].grid(row=row, column=0, sticky=tk.EW)
+        row += 1
+
+        subrow = 0
+        widgets = []
+        for site, mult, symbol in site_data:
+            i = subrow + 1
+            key = f'site {i}'
+            if key not in self:
+                self[key] = sw.LabeledEntry(self['site_frame'], labeltext=key)
+            w = self[key]
+            w.grid(row=subrow, sticky=tk.EW)
+            subrow += 1
+            if aflow_prototype != self._last_prototype:
+                w.set(symbol)
+            label = f'Site {i} -- {mult}{site}:'
+            w.config(labeltext=label)
+            widgets.append(w)
+        sw.align_labels(widgets)
+
+        # Remember the last prototype
+        self._last_prototype = aflow_prototype
+
+        self['frame'].grid_columnconfigure(0, weight=1, minsize=500)
+
+        # All done resetting, so turn bindings back on.
+        self._in_reset = False
 
     def right_click(self, event):
         """
@@ -180,6 +328,8 @@ class TkCrystalBuilder(seamm.TkNode):
         """
 
         if self.dialog is None:
+            P = self.node.parameters
+            self._last_prototype = P['AFLOW prototype'].value
             self.create_dialog()
 
         self.dialog.activate(geometry='centerscreenfirst')
@@ -221,7 +371,23 @@ class TkCrystalBuilder(seamm.TkNode):
         # it is easy! You can sort out what it all means later, or
         # be a bit more selective.
         for key in P:
-            P[key].set_from_widget()
+            if key != 'elements':
+                P[key].set_from_widget()
+
+        P['AFLOW prototype'].set(self._tmp['AFLOW prototype'])
+
+        aflow_prototype = self._last_prototype
+        cb_data = crystal_builder_step.prototype_data[aflow_prototype]
+        site_data = cb_data['sites']
+        i = 0
+        elements = []
+        for site, mult, symbol in site_data:
+            i += 1
+            key = f'site {i}'
+            elements.append(self[key].get())
+        P['elements'].set(elements)
+
+        self._tmp = {}
 
     def handle_help(self):
         """Shows the help to the user when click on help button.

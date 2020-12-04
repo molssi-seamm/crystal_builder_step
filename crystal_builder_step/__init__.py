@@ -14,6 +14,10 @@ from crystal_builder_step.crystal_builder_parameters import CrystalBuilderParame
 from crystal_builder_step.crystal_builder_step import CrystalBuilderStep  # noqa: F401, E501
 from crystal_builder_step.tk_crystal_builder import TkCrystalBuilder  # noqa: F401, E501
 
+from crystal_builder_step.crystal_metadata import common_prototypes  # noqa: F401, E501
+from crystal_builder_step.crystal_metadata import prototypes  # noqa: F401
+from crystal_builder_step.crystal_metadata import prototype_data  # noqa: F401
+
 # Handle versioneer
 from ._version import get_versions
 __author__ = """Paul Saxe"""

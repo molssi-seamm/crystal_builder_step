@@ -6,9 +6,6 @@
 data_findsym-output
 _audit_creation_method FINDSYM
 
-data_findsym-output
-_audit_creation_method FINDSYM
-
 _chemical_name_mineral 'Cubic alpha N2'
 _chemical_formula_sum 'N'
 
