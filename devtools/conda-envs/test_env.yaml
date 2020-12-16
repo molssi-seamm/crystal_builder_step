@@ -20,6 +20,7 @@ dependencies:
 
   # Pip-only installs
   - pip:
+    - openpyxl
     - pycifrw
     - seamm
     - seamm-util
