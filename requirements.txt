@@ -1,3 +1,4 @@
+openpyxl==3.0.5
 pycifrw==4.4.1
 seamm==2020.12.4
 seamm-util==2020.12.2
