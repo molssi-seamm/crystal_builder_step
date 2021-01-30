@@ -11,6 +11,7 @@ import logging
 import pprint
 
 import crystal_builder_step
+import molsystem
 import seamm
 from seamm_util import ureg, Q_  # noqa: F401
 import seamm_util.printing as printing
@@ -180,7 +181,8 @@ class CrystalBuilder(seamm.Node):
         next_node = super().run(printer)
 
         # Get the system
-        system = self.get_variable('_system')
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
 
         # Get the values of the parameters, dereferencing any variables
         P = self.parameters.current_values_to_dict(
@@ -197,7 +199,7 @@ class CrystalBuilder(seamm.Node):
         self.logger.debug(f'Formatted values:\n{pprint.pformat(PP)}')
         printer.important(__(self.description_text(PP), indent=self.indent))
 
-        # Create the system from the cif file for the prototype
+        # Create the configuration from the cif file for the prototype
         aflow_prototype = P['AFLOW prototype']
 
         package = self.__module__.split('.')[0]
@@ -205,12 +207,12 @@ class CrystalBuilder(seamm.Node):
         if len(files) > 0:
             path = files[0]
             data = path.read_text()
-            system.from_cif_text(data)
+            configuration.from_cif_text(data)
 
         # Now set the cell parameters. If unmentioned the lattice parameters
         # get the previous value, e.g. a, a, c. The angles are those of the
         # prototype if not mentioned.
-        a0, b0, c0, alpha0, beta0, gamma0 = system.cell.cell().parameters
+        a0, b0, c0, alpha0, beta0, gamma0 = configuration.cell.parameters
 
         data = crystal_builder_step.prototype_data[aflow_prototype]
         cell = data['cell']
@@ -242,7 +244,7 @@ class CrystalBuilder(seamm.Node):
             new_cell.append(last)
 
         self.logger.debug(f'cell = {new_cell}')
-        system.cell.set_cell(new_cell)
+        configuration.cell.parameters = new_cell
 
         # And the elements for the sites. Not that symmetry has been lowered
         # to P1
@@ -253,8 +255,8 @@ class CrystalBuilder(seamm.Node):
                 symbol = self.get_variable(symbol)
             symbols.extend([symbol] * mult)
         self.logger.debug(f'symbols = {symbols}')
-        atnos = system.atoms.to_atnos(symbols)
-        column = system.atoms.get_column('atno')
+        atnos = molsystem.elements.to_atnos(symbols)
+        column = configuration.atoms.get_column('atno')
         column[0:] = atnos
 
         # Requested citations for the AFLOW protoype library
