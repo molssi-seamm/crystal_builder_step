@@ -195,7 +195,6 @@ def run(filename='prototypes.xlsx'):
     wb = openpyxl.load_workbook(filename=filename)
     ws = wb['Sheet1']
 
-    row = 1
     row_max = ws.max_row
 
     data = {
@@ -324,19 +323,18 @@ def get_bibtex(prototype):
     pages = f'{first}-{last}'
 
     template = string.Template(
-        textwrap.dedent(
-            """\
-            @article{$prototype,
-                author = {$author_list},
-                title = {$title},
-                journal = {$journal},
-                volume = {$volume},
-                pages = {$pages},
-                year = $year,
-            }
-            """
-        )
+        """\
+        @article{$prototype,
+        author = {$author_list},
+        title = {$title},
+        journal = {$journal},
+        volume = {$volume},
+        pages = {$pages},
+        year = $year,
+        }
+        """
     )
+    
     citation = template.substitute(
         prototype=prototype,
         author_list=author_list,
@@ -385,89 +383,91 @@ if __name__ == "__main__":  # pragma: no cover
     import urllib.parse
     import urllib.request
 
-    if True:
-        test()
-    elif False:
-        bibtex = ''
-        with open('prototypes.json', 'r') as fd:
-            data = json.load(fd)
+    test()
 
-        for prototype in data['AFLOW prototype']:
-            print(prototype)
-            if prototype in bib:
-                text = bib[prototype]
-            else:
-                text = get_bibtex(prototype)
-            bibtex += text
-        with open('references2.bib', 'w') as fd:
-            fd.write(bibtex)
-    elif False:
-        run()
-    elif False:
-        # Fix the prototypes to have added formula part in some cases
-        # Get the data from the json
-        with open('prototypes.json', 'r') as fd:
-            data = json.load(fd)
+    # if True:
+    #     test()
+    # elif False:
+    #     bibtex = ''
+    #     with open('prototypes.json', 'r') as fd:
+    #         data = json.load(fd)
 
-        aflow_prototypes = []
-        for hyperlink in data['hyperlink']:
-            url = urllib.parse.urlsplit(hyperlink)
-            path = url.path
-            root, extension = os.path.splitext(os.path.basename(path))
-            aflow_prototypes.append(root)
+    #     for prototype in data['AFLOW prototype']:
+    #         print(prototype)
+    #         if prototype in bib:
+    #             text = bib[prototype]
+    #         else:
+    #             text = get_bibtex(prototype)
+    #         bibtex += text
+    #     with open('references2.bib', 'w') as fd:
+    #         fd.write(bibtex)
+    # elif False:
+    #     run()
+    # elif False:
+    #     # Fix the prototypes to have added formula part in some cases
+    #     # Get the data from the json
+    #     with open('prototypes.json', 'r') as fd:
+    #         data = json.load(fd)
 
-        data['AFLOW prototype'] = aflow_prototypes
+    #     aflow_prototypes = []
+    #     for hyperlink in data['hyperlink']:
+    #         url = urllib.parse.urlsplit(hyperlink)
+    #         path = url.path
+    #         root, extension = os.path.splitext(os.path.basename(path))
+    #         aflow_prototypes.append(root)
 
-        with open('prototypes2.json', 'w') as fd:
-            json.dump(data, fd, indent=4)
-    else:
-        # Get the data from the json
-        with open('prototypes2.json', 'r') as fd:
-            data = json.load(fd)
+    #     data['AFLOW prototype'] = aflow_prototypes
 
-        cp = data['cell parameters'] = []
-        sites = data['sites'] = []
-        # Fetch the cif file to get the adjustable parameters
-        for hyperlink in data['hyperlink']:
-            url = urllib.parse.urlsplit(hyperlink)
-            path = url.path
-            root, extension = os.path.splitext(os.path.basename(path))
-            filename = root + '.cif'
-            new_path = os.path.join('.', filename)
-            if not os.path.exists(new_path):
-                print(f'{new_path} does not exist')
-            else:
-                try:
-                    cif = CifFile.ReadCif(new_path)
-                except Exception:
-                    print(f'Error in {new_path}\n\n')
-                    raise
-                tmp = cif['findsym-output']
-                params = tmp['_aflow_params'].split(',')
-                values = tmp['_aflow_params_values'].split(',')
+    #     with open('prototypes2.json', 'w') as fd:
+    #         json.dump(data, fd, indent=4)
+    # else:
+    #     # Get the data from the json
+    #     with open('prototypes2.json', 'r') as fd:
+    #         data = json.load(fd)
 
-                cell_parameters = []
-                for param, value in zip(params, values):
-                    if param[0] in ('x', 'y', 'z'):
-                        break
-                    if param[0] == '\\':
-                        cell_parameters.append((param[1:], value))
-                    elif param == 'b/a':
-                        cell_parameters.append(('b', tmp['_cell_length_b']))
-                    elif param == 'c/a':
-                        cell_parameters.append(('c', tmp['_cell_length_c']))
-                    else:
-                        cell_parameters.append((param, value))
-                cp.append(cell_parameters)
+    #     cp = data['cell parameters'] = []
+    #     sites = data['sites'] = []
+    #     # Fetch the cif file to get the adjustable parameters
+    #     for hyperlink in data['hyperlink']:
+    #         url = urllib.parse.urlsplit(hyperlink)
+    #         path = url.path
+    #         root, extension = os.path.splitext(os.path.basename(path))
+    #         filename = root + '.cif'
+    #         new_path = os.path.join('.', filename)
+    #         if not os.path.exists(new_path):
+    #             print(f'{new_path} does not exist')
+    #         else:
+    #             try:
+    #                 cif = CifFile.ReadCif(new_path)
+    #             except Exception:
+    #                 print(f'Error in {new_path}\n\n')
+    #                 raise
+    #             tmp = cif['findsym-output']
+    #             params = tmp['_aflow_params'].split(',')
+    #             values = tmp['_aflow_params_values'].split(',')
 
-                site_data = []
-                for symbol, site, mult in zip(
-                    tmp['_atom_site_type_symbol'],
-                    tmp['_atom_site_Wyckoff_label'],
-                    tmp['_atom_site_symmetry_multiplicity']
-                ):
-                    site_data.append((site, int(mult), symbol))
-                sites.append(site_data)
+    #             cell_parameters = []
+    #             for param, value in zip(params, values):
+    #                 if param[0] in ('x', 'y', 'z'):
+    #                     break
+    #                 if param[0] == '\\':
+    #                     cell_parameters.append((param[1:], value))
+    #                 elif param == 'b/a':
+    #                     cell_parameters.append(('b', tmp['_cell_length_b']))
+    #                 elif param == 'c/a':
+    #                     cell_parameters.append(('c', tmp['_cell_length_c']))
+    #                 else:
+    #                     cell_parameters.append((param, value))
+    #             cp.append(cell_parameters)
 
-        with open('prototypes3.json', 'w') as fd:
-            json.dump(data, fd, indent=4)
+    #             site_data = []
+    #             for symbol, site, mult in zip(
+    #                 tmp['_atom_site_type_symbol'],
+    #                 tmp['_atom_site_Wyckoff_label'],
+    #                 tmp['_atom_site_symmetry_multiplicity']
+    #             ):
+    #                 site_data.append((site, int(mult), symbol))
+    #             sites.append(site_data)
+
+    #     with open('prototypes3.json', 'w') as fd:
+    #         json.dump(data, fd, indent=4)

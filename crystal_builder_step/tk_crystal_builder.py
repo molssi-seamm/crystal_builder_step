@@ -2,12 +2,10 @@
 
 """The graphical part of a Crystal Builder step"""
 
-import pprint  # noqa: F401
 import tkinter as tk
 import tkinter.ttk as ttk
 
 import seamm
-from seamm_util import ureg, Q_, units_class  # noqa: F401
 import seamm_widgets as sw
 import crystal_builder_step  # noqa: F401
 
