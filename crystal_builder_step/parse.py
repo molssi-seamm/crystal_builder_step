@@ -301,7 +301,7 @@ def get_bibtex(prototype):
     try:
         cif = CifFile.ReadCif(prototype + '.cif')
     except Exception:
-        print(f'Error in {new_path}\n\n')
+        print(f'Error in {prototype}.cif\n\n')
         raise
     tmp = cif['findsym-output']
     authors = tmp['_publ_author_name']
@@ -334,7 +334,7 @@ def get_bibtex(prototype):
         }
         """
     )
-    
+
     citation = template.substitute(
         prototype=prototype,
         author_list=author_list,
@@ -349,7 +349,6 @@ def get_bibtex(prototype):
 
 
 def test():
-    import textwrap
     import bibtexparser
     import reference_handler
 
