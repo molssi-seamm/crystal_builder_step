@@ -27,7 +27,7 @@ setup(
     name='crystal_builder_step',
     author="Paul Saxe",
     author_email='psaxe@molssi.org',
-    description=short_description[1],
+    description=short_description,
     long_description=readme + '\n\n' + history,
     long_description_content_type='text/x-rst',
     version=versioneer.get_version(),
@@ -64,9 +64,10 @@ setup(
     # prevent the .egg from being made
     zip_safe=True,
 
-    keywords=['SEAMM', 'plug-in', 'flowchart', 'crystal', 'Strukturbericht'],
+    keywords=['SEAMM', 'plug-in', 'flowchart', 'crystal', 'Strukturbericht',
+              'prototype'],
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Chemistry',
         'Topic :: Scientific/Engineering :: Physics',
