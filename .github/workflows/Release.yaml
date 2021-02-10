@@ -7,7 +7,7 @@ on:
       - "main"
 
 jobs:
-  lint-:
+  lint:
     name: Lint ubuntu-latest Py3.8
     runs-on: ubuntu-latest
     steps:
