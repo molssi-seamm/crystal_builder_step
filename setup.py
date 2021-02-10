@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-crystal_builder_step
-A step for building crystals in SEAMM
+"""crystal_builder_step
+A SEAMM plug-in for creating crystals from prototypes, including Strukturbericht designations.
 """
 import sys
 from setuptools import setup, find_packages
 import versioneer
 
-short_description = __doc__.split("\n")
+short_description = __doc__.splitlines()[1]
 
 # from https://github.com/pytest-dev/pytest-runner#conditional-requirement
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
@@ -30,6 +29,7 @@ setup(
     author_email='psaxe@molssi.org',
     description=short_description[1],
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/x-rst',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     license="BSD-3-Clause",
@@ -64,7 +64,7 @@ setup(
     # prevent the .egg from being made
     zip_safe=True,
 
-    keywords='crystal_builder_step',
+    keywords=['SEAMM', 'plug-in', 'flowchart', 'crystal', 'Strukturbericht'],
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Science/Research',
