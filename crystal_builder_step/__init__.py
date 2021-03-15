@@ -20,6 +20,7 @@ from crystal_builder_step.crystal_metadata import prototype_data  # noqa: F401
 
 # Handle versioneer
 from ._version import get_versions
+
 __author__ = """Paul Saxe"""
 __email__ = 'psaxe@molssi.org'
 versions = get_versions()
