@@ -180,8 +180,7 @@ class CrystalBuilder(seamm.Node):
         next_node = super().run(printer)
 
         # Get the system
-        system_db = self.get_variable('_system_db')
-        configuration = system_db.system.configuration
+        system, configuration = self.get_system_configuration(None)
 
         # Get the values of the parameters, dereferencing any variables
         P = self.parameters.current_values_to_dict(
