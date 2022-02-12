@@ -244,7 +244,7 @@ class CrystalBuilder(seamm.Node):
         self.logger.debug(f'cell = {new_cell}')
         configuration.cell.parameters = new_cell
 
-        # And the elements for the sites. Not that symmetry has been lowered
+        # And the elements for the sites. Note that symmetry has been lowered
         # to P1
         symbols = []
         for site_data, symbol in zip(sites, P['elements']):
@@ -256,6 +256,9 @@ class CrystalBuilder(seamm.Node):
         atnos = molsystem.elements.to_atnos(symbols)
         column = configuration.atoms.get_column('atno')
         column[0:] = atnos
+
+        # Find the symmetry and set to the conventional cell.
+        self.symmetrize(symprec=0.0001)
 
         # Requested citations for the AFLOW protoype library
         self.references.cite(
