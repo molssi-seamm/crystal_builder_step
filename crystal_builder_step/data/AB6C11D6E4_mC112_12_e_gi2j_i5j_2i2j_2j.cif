@@ -1,0 +1,81 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'Chrysotile'
+_chemical_formula_sum '(H2O) Mg6 O11 (OH)6 Si4'
+
+loop_
+_publ_author_name
+ 'B. E. Warren'
+ 'W. L. Bragg'
+_journal_name_full_name
+;
+ Zeitschrift f{\"u}r Kristallographie - Crystalline Materials
+;
+_journal_volume 76
+_journal_year 1931
+_journal_page_first 201
+_journal_page_last 210
+_publ_Section_title
+;
+ The Structure of Chrysotile H$_{4}$Mg$_{3}$Si$_{2}$O$_{9}$
+;
+
+# Found in Strukturbericht Band II 1928-1932, 1937
+
+_aflow_title 'Chrysotile (H$_{4}$Mg$_{3}$Si$_{2}$O$_{9}$, $S4_{5}$) Structure'
+_aflow_proto 'AB6C11D6E4_mC112_12_e_gi2j_i5j_2i2j_2j'
+_aflow_params 'a,b/a,c/a,\beta,y_{2},x_{3},z_{3},x_{4},z_{4},x_{5},z_{5},x_{6},z_{6},x_{7},y_{7},z_{7},x_{8},y_{8},z_{8},x_{9},y_{9},z_{9},x_{10},y_{10},z_{10},x_{11},y_{11},z_{11},x_{12},y_{12},z_{12},x_{13},y_{13},z_{13},x_{14},y_{14},z_{14},x_{15},y_{15},z_{15},x_{16},y_{16},z_{16},x_{17},y_{17},z_{17}'
+_aflow_params_values '15.31076,1.20830056771,0.348121190588,107.07121,0.75,0.32,0.72,0.9,0.9,0.75,0.45,0.4,0.4,0.32,0.17,0.22,0.32,0.08,0.72,0.4,0.37,0.25,0.4,0.37,0.75,0.4,0.25,0.4,0.25,0.42,-0.05,0.25,0.33,0.45,0.4,0.17,0.9,0.4,0.08,0.4,0.37,0.42,-0.03,0.37,0.33,0.47'
+_aflow_Strukturbericht '$S4_{5}$'
+_aflow_Pearson 'mC112'
+
+_symmetry_space_group_name_H-M "C 1 2/m 1"
+_symmetry_Int_Tables_number 12
+ 
+_cell_length_a    15.31076
+_cell_length_b    18.50000
+_cell_length_c    5.33000
+_cell_angle_alpha 90.00000
+_cell_angle_beta  107.07121
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 -x,y,-z
+3 -x,-y,-z
+4 x,-y,z
+5 x+1/2,y+1/2,z
+6 -x+1/2,y+1/2,-z
+7 -x+1/2,-y+1/2,-z
+8 x+1/2,-y+1/2,z
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+H2O1 H2O 4 e 0.25000 0.25000 0.00000 1.00000
+Mg1 Mg 4 g 0.00000 0.75000 0.00000 1.00000
+Mg2 Mg 4 i 0.32000 0.00000 0.72000 1.00000
+O1 O 4 i 0.90000 0.00000 0.90000 1.00000
+OH1 OH 4 i 0.75000 0.00000 0.45000 1.00000
+OH2 OH 4 i 0.40000 0.00000 0.40000 1.00000
+Mg3 Mg 8 j 0.32000 0.17000 0.22000 1.00000
+Mg4 Mg 8 j 0.32000 0.08000 0.72000 1.00000
+O2 O 8 j 0.40000 0.37000 0.25000 1.00000
+O3 O 8 j 0.40000 0.37000 0.75000 1.00000
+O4 O 8 j 0.40000 0.25000 0.40000 1.00000
+O5 O 8 j 0.25000 0.42000 -0.05000 1.00000
+O6 O 8 j 0.25000 0.33000 0.45000 1.00000
+OH3 OH 8 j 0.40000 0.17000 0.90000 1.00000
+OH4 OH 8 j 0.40000 0.08000 0.40000 1.00000
+Si1 Si 8 j 0.37000 0.42000 -0.03000 1.00000
+Si2 Si 8 j 0.37000 0.33000 0.47000 1.00000

@@ -28,12 +28,9 @@ class CrystalBuilderStep(object):
     """
 
     my_description = {
-        'description':
-            (
-                'An interface for the pyiron crystal builder'
-            ),
-        'group': 'Building',
-        'name': 'Crystal Builder'
+        "description": ("An interface for the pyiron crystal builder"),
+        "group": "Building",
+        "name": "Crystal Builder",
     }  # yapf: disable
 
     def __init__(self, flowchart=None, gui=None):
@@ -44,8 +41,7 @@ class CrystalBuilderStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return CrystalBuilderStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):
@@ -72,9 +68,7 @@ class CrystalBuilderStep(object):
 
         """
 
-        return crystal_builder_step.CrystalBuilder(
-            flowchart=flowchart, **kwargs
-        )
+        return crystal_builder_step.CrystalBuilder(flowchart=flowchart, **kwargs)
 
     def create_tk_node(self, canvas=None, **kwargs):
         """Create and return the graphical Tk node object.

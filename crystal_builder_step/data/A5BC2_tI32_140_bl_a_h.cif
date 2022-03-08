@@ -1,0 +1,85 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'Br5(NH4)Pb2'
+_chemical_formula_sum 'Br5 (NH4) Pb2'
+
+loop_
+_publ_author_name
+ 'H. M. Powell'
+ 'H. S. Tasker'
+_journal_year 1937
+_publ_Section_title
+;
+ The valency angle of bivalent lead: the crystal structure of ammonium, rubidium, and potassium pentabromodiplumbites
+;
+
+# Found in Strukturbericht Band V 1937, 1940
+
+_aflow_title 'NH$_{4}$Pb$_{2}$Br$_{5}$ ($K3_{4}$) Structure'
+_aflow_proto 'A5BC2_tI32_140_bl_a_h'
+_aflow_params 'a,c/a,x_{3},x_{4},z_{4}'
+_aflow_params_values '8.39,1.70917759237,0.158,0.163,0.363'
+_aflow_Strukturbericht '$K3_{4}$'
+_aflow_Pearson 'tI32'
+
+_symmetry_space_group_name_H-M "I 4/m 2/c 2/m"
+_symmetry_Int_Tables_number 140
+ 
+_cell_length_a    8.39000
+_cell_length_b    8.39000
+_cell_length_c    14.34000
+_cell_angle_alpha 90.00000
+_cell_angle_beta  90.00000
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 x,-y,-z+1/2
+3 -x,y,-z+1/2
+4 -x,-y,z
+5 -y,-x,-z+1/2
+6 -y,x,z
+7 y,-x,z
+8 y,x,-z+1/2
+9 -x,-y,-z
+10 -x,y,z+1/2
+11 x,-y,z+1/2
+12 x,y,-z
+13 y,x,z+1/2
+14 y,-x,-z
+15 -y,x,-z
+16 -y,-x,z+1/2
+17 x+1/2,y+1/2,z+1/2
+18 x+1/2,-y+1/2,-z
+19 -x+1/2,y+1/2,-z
+20 -x+1/2,-y+1/2,z+1/2
+21 -y+1/2,-x+1/2,-z
+22 -y+1/2,x+1/2,z+1/2
+23 y+1/2,-x+1/2,z+1/2
+24 y+1/2,x+1/2,-z
+25 -x+1/2,-y+1/2,-z+1/2
+26 -x+1/2,y+1/2,z
+27 x+1/2,-y+1/2,z
+28 x+1/2,y+1/2,-z+1/2
+29 y+1/2,x+1/2,z
+30 y+1/2,-x+1/2,-z+1/2
+31 -y+1/2,x+1/2,-z+1/2
+32 -y+1/2,-x+1/2,z
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+NH41 NH4 4 a 0.00000 0.00000 0.25000 1.00000
+Br1 Br 4 b 0.00000 0.50000 0.25000 1.00000
+Pb1 Pb 8 h 0.15800 0.65800 0.00000 1.00000
+Br2 Br 16 l 0.16300 0.66300 0.36300 1.00000

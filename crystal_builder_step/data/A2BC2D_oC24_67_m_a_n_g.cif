@@ -1,0 +1,76 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'H2(NH4)O2P'
+_chemical_formula_sum 'H2 (NH4) O2 P'
+
+loop_
+_publ_author_name
+ 'W. H. Zachariasen'
+ 'R. C. L. Mooney'
+_journal_name_full_name
+;
+ Journal of Chemical Physics
+;
+_journal_volume 2
+_journal_year 1934
+_journal_page_first 34
+_journal_page_last 37
+_publ_Section_title
+;
+ The Structure of the Hypophosphite Group as Determined from the Crystal Lattice of Ammonium Hypophosphite
+;
+
+# Found in Strukturbericht Band III 1933-1935, 1937
+
+_aflow_title 'NH$_{4}$H$_{2}$PO$_{2}$ ($F5_{7}$) Structure'
+_aflow_proto 'A2BC2D_oC24_67_m_a_n_g'
+_aflow_params 'a,b/a,c/a,z_{2},y_{3},z_{3},x_{4},z_{4}'
+_aflow_params_values '11.47,0.659982563208,0.346992153444,0.458,0.608,0.806,0.386,0.348'
+_aflow_Strukturbericht '$F5_{7}$'
+_aflow_Pearson 'oC24'
+
+_symmetry_space_group_name_H-M "C 2/m 2/m 2/a"
+_symmetry_Int_Tables_number 67
+ 
+_cell_length_a    11.47000
+_cell_length_b    7.57000
+_cell_length_c    3.98000
+_cell_angle_alpha 90.00000
+_cell_angle_beta  90.00000
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 x,-y,-z
+3 -x+1/2,y,-z
+4 -x+1/2,-y,z
+5 -x,-y,-z
+6 -x,y,z
+7 x+1/2,-y,z
+8 x+1/2,y,-z
+9 x+1/2,y+1/2,z
+10 x+1/2,-y+1/2,-z
+11 -x,y+1/2,-z
+12 -x,-y+1/2,z
+13 -x+1/2,-y+1/2,-z
+14 -x+1/2,y+1/2,z
+15 x,-y+1/2,z
+16 x,y+1/2,-z
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+NH41 NH4 4 a 0.25000 0.00000 0.00000 1.00000
+P1 P 4 g 0.00000 0.25000 0.45800 1.00000
+H1 H 8 m 0.00000 0.60800 0.80600 1.00000
+O1 O 8 n 0.38600 0.25000 0.34800 1.00000

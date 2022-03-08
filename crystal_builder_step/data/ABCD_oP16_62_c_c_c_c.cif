@@ -1,0 +1,67 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'ClBrI(NH4)'
+_chemical_formula_sum 'Br Cl I (NH4)'
+
+loop_
+_publ_author_name
+ 'R. C. L. Mooney'
+_journal_name_full_name
+;
+ Zeitschrift f{\"u}r Kristallographie - Crystalline Materials
+;
+_journal_volume 98
+_journal_year 1938
+_journal_page_first 324
+_journal_page_last 333
+_publ_Section_title
+;
+ The Crystal Structure of Ammonium Chlorobromoiodide and the Configuration of the Chlorobromoiodide Group
+;
+
+# Found in Strukturbericht Band V 1937, 1940
+
+_aflow_title 'NH$_{4}$ClBrI ($F5_{14}$) Structure'
+_aflow_proto 'ABCD_oP16_62_c_c_c_c'
+_aflow_params 'a,b/a,c/a,x_{1},z_{1},x_{2},z_{2},x_{3},z_{3},x_{4},z_{4}'
+_aflow_params_values '9.94,0.616700201207,0.855130784708,0.576,0.748,0.192,0.381,0.376,0.561,0.372,0.074'
+_aflow_Strukturbericht '$F5_{14}$'
+_aflow_Pearson 'oP16'
+
+_symmetry_space_group_name_H-M "P 21/n 21/m 21/a"
+_symmetry_Int_Tables_number 62
+ 
+_cell_length_a    9.94000
+_cell_length_b    6.13000
+_cell_length_c    8.50000
+_cell_angle_alpha 90.00000
+_cell_angle_beta  90.00000
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 x+1/2,-y+1/2,-z+1/2
+3 -x,y+1/2,-z
+4 -x+1/2,-y,z+1/2
+5 -x,-y,-z
+6 -x+1/2,y+1/2,z+1/2
+7 x,-y+1/2,z
+8 x+1/2,y,-z+1/2
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+Br1 Br 4 c 0.57600 0.25000 0.74800 1.00000
+Cl1 Cl 4 c 0.19200 0.25000 0.38100 1.00000
+I1 I 4 c 0.37600 0.25000 0.56100 1.00000
+NH41 NH4 4 c 0.37200 0.25000 0.07400 1.00000

@@ -1,0 +1,66 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'Ca3O6U'
+_chemical_formula_sum 'Ca3 O6 U'
+
+loop_
+_publ_author_name
+ 'B. O. Loopstra'
+ 'H. M. Rietveld'
+_journal_name_full_name
+;
+ Acta Crystallographica Section B: Structural Science
+;
+_journal_volume 25
+_journal_year 1969
+_journal_page_first 787
+_journal_page_last 791
+_publ_Section_title
+;
+ The structure of some alkaline-earth metal uranates
+;
+
+_aflow_title 'Ca$_{3}$UO$_{6}$ Structure'
+_aflow_proto 'A3B6C_mP20_4_3a_6a_a'
+_aflow_params 'a,b/a,c/a,\beta,x_{1},y_{1},z_{1},x_{2},y_{2},z_{2},x_{3},y_{3},z_{3},x_{4},y_{4},z_{4},x_{5},y_{5},z_{5},x_{6},y_{6},z_{6},x_{7},y_{7},z_{7},x_{8},y_{8},z_{8},x_{9},y_{9},z_{9},x_{10},y_{10},z_{10}'
+_aflow_params_values '5.7275,1.03996508075,1.44883457006,90.568,0.2621,-0.0025,0.7488,0.2723,0.4223,0.0123,0.7532,0.0288,0.4761,0.6319,0.41,0.5173,0.5605,0.1618,0.1938,0.0747,0.2744,0.3323,0.1165,0.0484,0.0152,0.0327,0.3053,0.6942,0.574,0.1963,0.8252,0.2459,0.0,0.2519'
+_aflow_Strukturbericht 'None'
+_aflow_Pearson 'mP20'
+
+_symmetry_space_group_name_H-M "P 1 21 1"
+_symmetry_Int_Tables_number 4
+ 
+_cell_length_a    5.72750
+_cell_length_b    5.95640
+_cell_length_c    8.29820
+_cell_angle_alpha 90.00000
+_cell_angle_beta  90.56800
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 -x,y+1/2,-z
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+Ca1 Ca 2 a 0.26210 -0.00250 0.74880 1.00000
+Ca2 Ca 2 a 0.27230 0.42230 0.01230 1.00000
+Ca3 Ca 2 a 0.75320 0.02880 0.47610 1.00000
+O1 O 2 a 0.63190 0.41000 0.51730 1.00000
+O2 O 2 a 0.56050 0.16180 0.19380 1.00000
+O3 O 2 a 0.07470 0.27440 0.33230 1.00000
+O4 O 2 a 0.11650 0.04840 0.01520 1.00000
+O5 O 2 a 0.03270 0.30530 0.69420 1.00000
+O6 O 2 a 0.57400 0.19630 0.82520 1.00000
+U1 U 2 a 0.24590 0.00000 0.25190 1.00000
