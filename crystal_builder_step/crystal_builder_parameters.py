@@ -199,6 +199,15 @@ class CrystalBuilderParameters(seamm.Parameters):
             "description": "Elements:",
             "help_text": "The elements at the different sites.",
         },
+        "coordinates": {
+            "default": [],
+            "kind": "list",
+            "default_units": None,
+            "enumeration": tuple(),
+            "format_string": "",
+            "description": "Coordinates:",
+            "help_text": "The coordinates of the site.",
+        },
         "a": {
             "default": 10.0,
             "kind": "float",

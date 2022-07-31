@@ -563,7 +563,7 @@ class TkCrystalBuilder(seamm.TkNode):
         # it is easy! You can sort out what it all means later, or
         # be a bit more selective.
         for key in P:
-            if key != "elements":
+            if key not in ("coordinates", "elements"):
                 P[key].set_from_widget()
 
         P["AFLOW prototype"].set(self._tmp["AFLOW prototype"])
@@ -573,6 +573,7 @@ class TkCrystalBuilder(seamm.TkNode):
         site_data = cb_data["sites"]
         i = 0
         elements = []
+        coords = []
         for site, mult, symbol, x, xmove, y, ymove, z, zmove in site_data:
             i += 1
             key = f"site {i}"
@@ -582,6 +583,8 @@ class TkCrystalBuilder(seamm.TkNode):
             newy = self["y " + key].get()
             newz = self["z " + key].get()
 
+            coords.append([newx, newy, newz])
+        P["coordinates"].set(coords)
         P["elements"].set(elements)
 
         self._tmp = {}

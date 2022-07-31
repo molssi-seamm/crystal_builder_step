@@ -7,8 +7,11 @@ try:
     import importlib.metadata as implib
 except Exception:
     import importlib_metadata as implib
+import io
 import logging
 import pprint
+
+import CifFile
 
 import crystal_builder_step
 import molsystem
@@ -150,10 +153,20 @@ class CrystalBuilder(seamm.Node):
         text += "\n"
 
         label = "sites"
-        for site_data, symbol in zip(sites, P["elements"]):
-            site, mult, _ = site_data
+        coordinates = self.parameters["coordinates"].get()
+        elements = self.parameters["elements"].get()
+        for site_data, symbol, xyz in zip(sites, elements, coordinates):
+            site, mult, symbol0, x0, unfix_x, y0, unfix_y, z0, unfix_z = site_data
+            x, y, z = xyz
             site = f"{mult}{site}"
-            text += f"\n                   {label:6} {site:>4}: {symbol}"
+            x = x[0:6] + ("*" if unfix_x else " ")
+            y = y[0:6] + ("*" if unfix_y else " ")
+            z = z[0:6] + ("*" if unfix_z else " ")
+
+            text += (
+                f"\n                   {label:6} {site:>4}: {symbol:2s} {x:6s} {y:6s} "
+                f"{z:6s}"
+            )
             label = " "
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
@@ -192,10 +205,14 @@ class CrystalBuilder(seamm.Node):
 
         package = self.__module__.split(".")[0]
         files = [p for p in implib.files(package) if aflow_prototype in str(p)]
-        if len(files) > 0:
-            path = files[0]
-            data = path.read_text()
-            configuration.from_cif_text(data)
+        if len(files) == 0:
+            raise RuntimeError(f"Could not find prototype '{aflow_prototype}'!")
+        path = files[0]
+        data = path.read_text()
+
+        data = self.fix_coordinates(data, P["coordinates"])
+
+        configuration.from_cif_text(data)
 
         # Now set the cell parameters. If unmentioned the lattice parameters
         # get the previous value, e.g. a, a, c. The angles are those of the
@@ -238,7 +255,7 @@ class CrystalBuilder(seamm.Node):
         # to P1
         symbols = []
         for site_data, symbol in zip(sites, P["elements"]):
-            site, mult, symbol0 = site_data
+            site, mult = site_data[0:2]
             if self.is_expr(symbol):
                 symbol = self.get_variable(symbol)
             symbols.extend([symbol] * mult)
@@ -277,3 +294,26 @@ class CrystalBuilder(seamm.Node):
         )
 
         return next_node
+
+    def fix_coordinates(self, text, coordinates):
+        """Change the coordinates in the CIF file."""
+
+        cif = CifFile.ReadCif(io.StringIO(text))
+
+        data_blocks = [*cif.keys()]
+        data_block = cif[data_blocks[0]]
+
+        xs = []
+        ys = []
+        zs = []
+        for tmp in coordinates:
+            x, y, z = tmp
+            xs.append(float(x))
+            ys.append(float(y))
+            zs.append(float(z))
+
+        data_block["_atom_site_fract_x"] = xs
+        data_block["_atom_site_fract_y"] = ys
+        data_block["_atom_site_fract_z"] = zs
+
+        return cif.WriteOut()
