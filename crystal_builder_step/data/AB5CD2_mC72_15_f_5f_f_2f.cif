@@ -1,0 +1,72 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'Pyrophyllite'
+_chemical_formula_sum 'Al O5 (OH) Si2'
+
+loop_
+_publ_author_name
+ 'J. W. Gruner'
+_journal_name_full_name
+;
+ Zeitschrift f{\"u}r Kristallographie - Crystalline Materials
+;
+_journal_volume 88
+_journal_year 1934
+_journal_page_first 412
+_journal_page_last 419
+_publ_Section_title
+;
+ The Crystal Structures of Talc and Pyrophyllite
+;
+
+# Found in Strukturbericht Band III 1933-1935, 1937
+
+_aflow_title 'Pyrophyllite [AlSi$_{2}$O$_{5}$(OH), $S5_{6}$] Structure'
+_aflow_proto 'AB5CD2_mC72_15_f_5f_f_2f'
+_aflow_params 'a,b/a,c/a,\beta,x_{1},y_{1},z_{1},x_{2},y_{2},z_{2},x_{3},y_{3},z_{3},x_{4},y_{4},z_{4},x_{5},y_{5},z_{5},x_{6},y_{6},z_{6},x_{7},y_{7},z_{7},x_{8},y_{8},z_{8},x_{9},y_{9},z_{9}'
+_aflow_params_values '5.14,1.73151750973,3.60894941634,99.91667,0.0,0.33333,0.0,0.20278,0.5,0.05833,0.20278,0.16667,0.05833,0.025,0.08333,0.17639,0.525,0.08333,0.17639,0.275,0.33333,0.17639,0.20278,0.83333,0.05833,0.76111,0.0,0.14306,0.26111,0.16667,0.14306'
+_aflow_Strukturbericht '$S5_{6}$'
+_aflow_Pearson 'mC72'
+
+_symmetry_space_group_name_H-M "C 1 2/c 1"
+_symmetry_Int_Tables_number 15
+ 
+_cell_length_a    5.14000
+_cell_length_b    8.90000
+_cell_length_c    18.55000
+_cell_angle_alpha 90.00000
+_cell_angle_beta  99.91667
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 -x,y,-z+1/2
+3 -x,-y,-z
+4 x,-y,z+1/2
+5 x+1/2,y+1/2,z
+6 -x+1/2,y+1/2,-z+1/2
+7 -x+1/2,-y+1/2,-z
+8 x+1/2,-y+1/2,z+1/2
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+Al1 Al 8 f 0.00000 0.33333 0.00000 1.00000
+O1 O 8 f 0.20278 0.50000 0.05833 1.00000
+O2 O 8 f 0.20278 0.16667 0.05833 1.00000
+O3 O 8 f 0.02500 0.08333 0.17639 1.00000
+O4 O 8 f 0.52500 0.08333 0.17639 1.00000
+O5 O 8 f 0.27500 0.33333 0.17639 1.00000
+OH1 OH 8 f 0.20278 0.83333 0.05833 1.00000
+Si1 Si 8 f 0.76111 0.00000 0.14306 1.00000
+Si2 Si 8 f 0.26111 0.16667 0.14306 1.00000

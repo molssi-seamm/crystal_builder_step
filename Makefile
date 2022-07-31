@@ -50,11 +50,11 @@ clean-test: ## remove test and coverage artifacts
 	find . -name '.pytype' -exec rm -fr {} +
 
 lint: ## check style with flake8
+	black --extend-exclude '_version.py' --check --diff $(MODULE) tests
 	flake8 $(MODULE) tests
-	yapf --diff --recursive  $(MODULE) tests
 
 format: ## reformat with with yapf and isort
-	yapf --recursive --in-place $(MODULE) tests
+	black --extend-exclude '_version.py' $(MODULE) tests
 
 typing: ## check typing
 	pytype $(MODULE)
@@ -75,32 +75,31 @@ coverage: ## check code coverage quickly with the default Python
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
-docs: ## generate Sphinx HTML documentation, including API docs
+html: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/developer/$(MODULE).rst
 	rm -f docs/developer/modules.rst
 	sphinx-apidoc -o docs/developer $(MODULE)
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
+
+docs: html ## generate and display the documentation in a browser
 	$(BROWSER) docs/_build/html/index.html
 
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
-release: clean ## package and upload a release
-	python setup.py sdist bdist_wheel
+release: dist ## package and upload a release
 	python -m twine upload dist/*
 
-check-release: clean ## package and upload a release
-	python setup.py sdist bdist_wheel
+check-release: dist ## check the release for errors
 	python -m twine check dist/*
 
 dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
+	python -m build
 	ls -l dist
 
 install: uninstall ## install the package to the active Python's site-packages
-	python setup.py install
+	pip install .
 
 uninstall: clean ## uninstall the package
 	pip uninstall --yes $(MODULE)

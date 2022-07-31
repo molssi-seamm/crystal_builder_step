@@ -11,44 +11,44 @@ logger = logging.getLogger(__name__)
 
 lattice_systems = {
     "cubic": {
-        'lattices': ["fcc", "bcc", "primitive"],
-        'parameters': ['a'],
-        'cell': ['a', 'a', 'a', 90.0, 90.0, 90.0]
+        "lattices": ["fcc", "bcc", "primitive"],
+        "parameters": ["a"],
+        "cell": ["a", "a", "a", 90.0, 90.0, 90.0],
     },
     "hexagonal": {
-        'lattices': ["primitive", "hcp"],
-        'parameters': ['a', 'c'],
-        'cell': ['a', 'a', 'c', 90.0, 90.0, 120.0]
+        "lattices": ["primitive", "hcp"],
+        "parameters": ["a", "c"],
+        "cell": ["a", "a", "c", 90.0, 90.0, 120.0],
     },
     "rhombohedral": {
-        'lattices': ["primitive"],
-        'parameters': ['a', 'alpha'],
-        'cell': ['a', 'a', 'a', 'alpha', 'alpha', 'alpha']
+        "lattices": ["primitive"],
+        "parameters": ["a", "alpha"],
+        "cell": ["a", "a", "a", "alpha", "alpha", "alpha"],
     },
     "tetragonal": {
-        'lattices': ["primitive", "body-centered"],
-        'parameters': ['a', 'c'],
-        'cell': ['a', 'a', 'c', 90.0, 90.0, 90.0]
+        "lattices": ["primitive", "body-centered"],
+        "parameters": ["a", "c"],
+        "cell": ["a", "a", "c", 90.0, 90.0, 90.0],
     },
     "orthorombic": {
-        'lattices': [
+        "lattices": [
             "primitive",
             "body-centered",
             "base-centered",
             "face-centered",
         ],
-        'parameters': ['a', 'b', 'c'],
-        'cell': ['a', 'b', 'c', 90.0, 90.0, 90.0]
+        "parameters": ["a", "b", "c"],
+        "cell": ["a", "b", "c", 90.0, 90.0, 90.0],
     },
     "monoclinic": {
-        'lattices': ["primitive", "base-centered"],
-        'parameters': ['a', 'b', 'c', 'beta'],
-        'cell': ['a', 'b', 'c', 90.0, 'beta', 90.0]
+        "lattices": ["primitive", "base-centered"],
+        "parameters": ["a", "b", "c", "beta"],
+        "cell": ["a", "b", "c", 90.0, "beta", 90.0],
     },
     "triclinic": {
-        'lattices': ["primitive"],
-        'parameters': ['a', 'b', 'c', 'alpha', 'beta', 'gamma'],
-        'cell': ['a', 'b', 'c', 'alpha', 'beta', 'gamma']
+        "lattices": ["primitive"],
+        "parameters": ["a", "b", "c", "alpha", "beta", "gamma"],
+        "cell": ["a", "b", "c", "alpha", "beta", "gamma"],
     },
 }
 
@@ -122,31 +122,64 @@ class CrystalBuilderParameters(seamm.Parameters):
 
     parameters = {
         "prototype_group": {
-            "default": 'common',
+            "default": "common",
             "kind": "enumeration",
             "default_units": None,
-            "enumeration": ('common', 'Strukturbericht', 'all'),
+            "enumeration": (
+                "common",
+                "Strukturbericht",
+                "AFLOW",
+                "prototype",
+                "description",
+            ),
             "format_string": "",
             "description": "Which prototypes:",
-            "help_text": ("The group of prototypes to display")
+            "help_text": "The group of prototypes to display",
         },
         "n_sites": {
-            "default": 'any',
+            "default": "any",
             "kind": "int",
             "default_units": None,
-            "enumeration": ('any',),
+            "enumeration": ("any",),
             "format_string": "",
             "description": "Number of occupied sites:",
-            "help_text": ("The number of occupied sites in the structure.")
+            "help_text": "The number of occupied sites in the structure.",
+        },
+        "n_elements": {
+            "default": "any",
+            "kind": "int",
+            "default_units": None,
+            "enumeration": ("any",),
+            "format_string": "",
+            "description": "Number of elements:",
+            "help_text": "The number of elements in the structure.",
+        },
+        "spacegroup": {
+            "default": "any",
+            "kind": "int",
+            "default_units": None,
+            "enumeration": ("any",),
+            "format_string": "",
+            "description": "Space group (or number):",
+            "help_text": "The space group for the structure.",
+        },
+        "pearson_symbol": {
+            "default": "any",
+            "kind": "int",
+            "default_units": None,
+            "enumeration": ("any",),
+            "format_string": "",
+            "description": "Pearson:",
+            "help_text": "The Pearson symbol.",
         },
         "prototype": {
             "default": "",
             "kind": "enumeration",
             "default_units": None,
-            "enumeration": ('place', 'holders'),
+            "enumeration": ("place", "holders"),
             "format_string": "",
             "description": "Prototype:",
-            "help_text": ("The prototype to use")
+            "help_text": "The prototype to use",
         },
         "AFLOW prototype": {
             "default": "",
@@ -155,16 +188,25 @@ class CrystalBuilderParameters(seamm.Parameters):
             "enumeration": tuple(),
             "format_string": "",
             "description": "AFLOW Prototype:",
-            "help_text": ("The AFLOW prototype")
+            "help_text": "The AFLOW prototype",
         },
         "elements": {
-            "default": ['Al'],
+            "default": ["Al"],
             "kind": "list",
             "default_units": None,
             "enumeration": tuple(),
             "format_string": "",
             "description": "Elements:",
-            "help_text": ("The elements at the different sites.")
+            "help_text": "The elements at the different sites.",
+        },
+        "coordinates": {
+            "default": [],
+            "kind": "list",
+            "default_units": None,
+            "enumeration": tuple(),
+            "format_string": "",
+            "description": "Coordinates:",
+            "help_text": "The coordinates of the site.",
         },
         "a": {
             "default": 10.0,
@@ -173,7 +215,7 @@ class CrystalBuilderParameters(seamm.Parameters):
             "enumeration": None,
             "format_string": ".2f",
             "description": "a:",
-            "help_text": ("The length of the first side of the cell.")
+            "help_text": "The length of the first side of the cell.",
         },
         "b": {
             "default": 10.0,
@@ -182,7 +224,7 @@ class CrystalBuilderParameters(seamm.Parameters):
             "enumeration": None,
             "format_string": ".2f",
             "description": "b:",
-            "help_text": ("The length of the second side of the cell.")
+            "help_text": "The length of the second side of the cell.",
         },
         "c": {
             "default": 10.0,
@@ -191,7 +233,7 @@ class CrystalBuilderParameters(seamm.Parameters):
             "enumeration": None,
             "format_string": ".2f",
             "description": "c:",
-            "help_text": ("The length of the third side of the cell.")
+            "help_text": "The length of the third side of the cell.",
         },
         "alpha": {
             "default": 90.0,
@@ -200,7 +242,7 @@ class CrystalBuilderParameters(seamm.Parameters):
             "enumeration": None,
             "format_string": ".1f",
             "description": "alpha:",
-            "help_text": ("The angle between a and b.")
+            "help_text": "The angle between a and b.",
         },
         "beta": {
             "default": 90.0,
@@ -209,7 +251,7 @@ class CrystalBuilderParameters(seamm.Parameters):
             "enumeration": None,
             "format_string": ".1f",
             "description": "beta:",
-            "help_text": ("The angle between a and c.")
+            "help_text": "The angle between a and c.",
         },
         "gamma": {
             "default": 90.0,
@@ -218,7 +260,7 @@ class CrystalBuilderParameters(seamm.Parameters):
             "enumeration": None,
             "format_string": ".1f",
             "description": "gamma:",
-            "help_text": ("The angle between b and c.")
+            "help_text": "The angle between b and c.",
         },
     }
 
@@ -237,9 +279,8 @@ class CrystalBuilderParameters(seamm.Parameters):
 
         """
 
-        logger.debug('CrystalBuilderParameters.__init__')
+        logger.debug("CrystalBuilderParameters.__init__")
 
         super().__init__(
-            defaults={**CrystalBuilderParameters.parameters, **defaults},
-            data=data
+            defaults={**CrystalBuilderParameters.parameters, **defaults}, data=data
         )

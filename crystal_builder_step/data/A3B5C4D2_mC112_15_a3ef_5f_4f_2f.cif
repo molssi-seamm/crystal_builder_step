@@ -1,0 +1,79 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'Chlorite'
+_chemical_formula_sum 'Mg3 O5 (OH)4 Si2'
+
+loop_
+_publ_author_name
+ 'R. C. {McMurchy}'
+_journal_name_full_name
+;
+ Zeitschrift f{\"u}r Kristallographie - Crystalline Materials
+;
+_journal_volume 88
+_journal_year 1934
+_journal_page_first 420
+_journal_page_last 432
+_publ_Section_title
+;
+ The Crystal Structure of the Chlorite Minerals
+;
+
+# Found in The American Mineralogist Crystal Structure Database, 2003
+
+_aflow_title 'Chlorite [Mg$_{3}$(Mg$_{2}$Al)(Si$_{3}$Al)O$_{10}$(OH)$_{8}$, $S5_{5}$] Structure'
+_aflow_proto 'A3B5C4D2_mC112_15_a3ef_5f_4f_2f'
+_aflow_params 'a,b/a,c/a,\beta,y_{2},y_{3},y_{4},x_{5},y_{5},z_{5},x_{6},y_{6},z_{6},x_{7},y_{7},z_{7},x_{8},y_{8},z_{8},x_{9},y_{9},z_{9},x_{10},y_{10},z_{10},x_{11},y_{11},z_{11},x_{12},y_{12},z_{12},x_{13},y_{13},z_{13},x_{14},y_{14},z_{14},x_{15},y_{15},z_{15},x_{16},y_{16},z_{16}'
+_aflow_params_values '5.305,1.73213949105,5.37229029218,97.147,0.16667,-0.16667,0.5,0.0,0.33333,0.0,-0.308,-0.33333,0.039,-0.308,0.0,0.039,-0.006,0.08333,0.114,-0.006,-0.417,0.114,-0.256,-0.16667,0.114,-0.308,0.33333,0.039,0.142,0.0,0.211,0.142,0.33333,0.211,0.142,-0.33333,0.211,-0.269,0.0,0.094,-0.269,-0.33333,0.094'
+_aflow_Strukturbericht '$S5_{5}$'
+_aflow_Pearson 'mC112'
+
+_symmetry_space_group_name_H-M "C 1 2/c 1"
+_symmetry_Int_Tables_number 15
+ 
+_cell_length_a    5.30500
+_cell_length_b    9.18900
+_cell_length_c    28.50000
+_cell_angle_alpha 90.00000
+_cell_angle_beta  97.14700
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 -x,y,-z+1/2
+3 -x,-y,-z
+4 x,-y,z+1/2
+5 x+1/2,y+1/2,z
+6 -x+1/2,y+1/2,-z+1/2
+7 -x+1/2,-y+1/2,-z
+8 x+1/2,-y+1/2,z+1/2
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+Mg1 Mg 4 a 0.00000 0.00000 0.00000 1.00000
+Mg2 Mg 4 e 0.00000 0.16667 0.25000 1.00000
+Mg3 Mg 4 e 0.00000 -0.16667 0.25000 1.00000
+Mg4 Mg 4 e 0.00000 0.50000 0.25000 1.00000
+Mg5 Mg 8 f 0.00000 0.33333 0.00000 1.00000
+O1 O 8 f -0.30800 -0.33333 0.03900 1.00000
+O2 O 8 f -0.30800 0.00000 0.03900 1.00000
+O3 O 8 f -0.00600 0.08333 0.11400 1.00000
+O4 O 8 f -0.00600 -0.41700 0.11400 1.00000
+O5 O 8 f -0.25600 -0.16667 0.11400 1.00000
+OH1 OH 8 f -0.30800 0.33333 0.03900 1.00000
+OH2 OH 8 f 0.14200 0.00000 0.21100 1.00000
+OH3 OH 8 f 0.14200 0.33333 0.21100 1.00000
+OH4 OH 8 f 0.14200 -0.33333 0.21100 1.00000
+Si1 Si 8 f -0.26900 0.00000 0.09400 1.00000
+Si2 Si 8 f -0.26900 -0.33333 0.09400 1.00000

@@ -1,0 +1,79 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'Meta-autunite (i)'
+_chemical_formula_sum 'Ca (H2O)4 O6 P U'
+
+loop_
+_publ_author_name
+ 'Y. S. Makarov'
+ 'V. I. Ivanov'
+_journal_name_full_name
+;
+ Doklady Akademii Nauk SSSR
+;
+_journal_volume 132
+_journal_year 1960
+_journal_page_first 601
+_journal_page_last 603
+_publ_Section_title
+;
+ The crystal structure of meta-autunite, Ca(UO$_{2}$)$_{2}$(PO$_{4}$)$_{2}$*6H$_{2}$O
+;
+
+# Found in The American Mineralogist Crystal Structure Database, 2003
+
+_aflow_title 'Meta-autunite (I) [Ca(UO$_{2}$)$_{2}$(PO$_{4}$)$_{2}$$\cdot$6H$_{2}$O, $H5_{10}$] Structure'
+_aflow_proto 'AB4C6DE_tP26_129_c_j_2ci_a_c'
+_aflow_params 'a,c/a,z_{2},z_{3},z_{4},z_{5},y_{6},z_{6},x_{7},z_{7}'
+_aflow_params_values '6.98,1.20630372493,0.612,0.343,0.893,0.106,0.584,0.106,0.486,0.392'
+_aflow_Strukturbericht '$H5_{10}$'
+_aflow_Pearson 'tP26'
+
+_symmetry_space_group_name_H-M "P 4/n 21/m 2/m (origin choice 2)"
+_symmetry_Int_Tables_number 129
+ 
+_cell_length_a    6.98000
+_cell_length_b    6.98000
+_cell_length_c    8.42000
+_cell_angle_alpha 90.00000
+_cell_angle_beta  90.00000
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 x+1/2,-y,-z
+3 -x,y+1/2,-z
+4 -x+1/2,-y+1/2,z
+5 -y,-x,-z
+6 -y+1/2,x,z
+7 y,-x+1/2,z
+8 y+1/2,x+1/2,-z
+9 -x,-y,-z
+10 -x+1/2,y,z
+11 x,-y+1/2,z
+12 x+1/2,y+1/2,-z
+13 y,x,z
+14 y+1/2,-x,-z
+15 -y,x+1/2,-z
+16 -y+1/2,-x+1/2,z
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+P1 P 2 a 0.75000 0.25000 0.00000 1.00000
+Ca1 Ca 2 c 0.25000 0.25000 0.61200 0.50000
+O1 O 2 c 0.25000 0.25000 0.34300 1.00000
+O2 O 2 c 0.25000 0.25000 0.89300 1.00000
+U1 U 2 c 0.25000 0.25000 0.10600 1.00000
+O3 O 8 i 0.25000 0.58400 0.10600 1.00000
+H2O1 H2O 8 j 0.48600 0.48600 0.39200 0.75000

@@ -1,0 +1,67 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'N(NH4)O3'
+_chemical_formula_sum 'N (NH4) O3'
+
+loop_
+_publ_author_name
+ 'Y. Shinnaka'
+_journal_name_full_name
+;
+ Journal of the Physical Society of Japan
+;
+_journal_volume 11
+_journal_year 1956
+_journal_page_first 393
+_journal_page_last 396
+_publ_Section_title
+;
+ On the Metastable Transition and the Crystal Structure of Ammonium Nitrate (Tetragonal Modification)
+;
+
+# Found in The structure of ammonium nitrate (IV), 1972
+
+_aflow_title 'NH$_{4}$NO$_{3}$ II ($G0_{9}$) Structure'
+_aflow_proto 'ABC3_tP10_100_b_a_bc'
+_aflow_params 'a,c/a,z_{1},z_{2},z_{3},x_{4},z_{4}'
+_aflow_params_values '5.74,0.862369337979,0.0,0.53,0.75,0.62,0.42'
+_aflow_Strukturbericht '$G0_{9}$'
+_aflow_Pearson 'tP10'
+
+_symmetry_space_group_name_H-M "P 4 b m"
+_symmetry_Int_Tables_number 100
+ 
+_cell_length_a    5.74000
+_cell_length_b    5.74000
+_cell_length_c    4.95000
+_cell_angle_alpha 90.00000
+_cell_angle_beta  90.00000
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 -x,-y,z
+3 -y,x,z
+4 y,-x,z
+5 -x+1/2,y+1/2,z
+6 x+1/2,-y+1/2,z
+7 y+1/2,x+1/2,z
+8 -y+1/2,-x+1/2,z
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+NH41 NH4 2 a 0.00000 0.00000 0.00000 1.00000
+N1 N 2 b 0.50000 0.00000 0.53000 1.00000
+O1 O 2 b 0.50000 0.00000 0.75000 1.00000
+O2 O 4 c 0.62000 0.12000 0.42000 1.00000

@@ -1,0 +1,67 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'Cl(NH4)O2'
+_chemical_formula_sum 'Cl (NH4) O2'
+
+loop_
+_publ_author_name
+ 'G. R. Levi'
+ 'A. Scherillo'
+_journal_name_full_name
+;
+ Zeitschrift f{\"u}r Kristallographie - Crystalline Materials
+;
+_journal_volume 76
+_journal_year 1931
+_journal_page_first 431
+_journal_page_last 452
+_publ_Section_title
+;
+ Ricerche cristallografiche sui sali dell\'acido cloroso
+;
+
+# Found in Strukturbericht Band II 1928-1932, 1937
+
+_aflow_title '$F5_{4}$ (NH$_{4}$ClO$_{2}$) ({\em{obsolete}}) Structure'
+_aflow_proto 'ABC2_tP8_100_b_a_c'
+_aflow_params 'a,c/a,z_{1},z_{2},x_{3},z_{3}'
+_aflow_params_values '6.3,0.587301587302,0.0,0.25,0.65,0.5'
+_aflow_Strukturbericht '$F5_{4}$'
+_aflow_Pearson 'tP8'
+
+_symmetry_space_group_name_H-M "P 4 b m"
+_symmetry_Int_Tables_number 100
+ 
+_cell_length_a    6.30000
+_cell_length_b    6.30000
+_cell_length_c    3.70000
+_cell_angle_alpha 90.00000
+_cell_angle_beta  90.00000
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 -x,-y,z
+3 -y,x,z
+4 y,-x,z
+5 -x+1/2,y+1/2,z
+6 x+1/2,-y+1/2,z
+7 y+1/2,x+1/2,z
+8 -y+1/2,-x+1/2,z
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+NH41 NH4 2 a 0.00000 0.00000 0.00000 1.00000
+Cl1 Cl 2 b 0.50000 0.00000 0.25000 1.00000
+O1 O 4 c 0.65000 0.15000 0.50000 1.00000

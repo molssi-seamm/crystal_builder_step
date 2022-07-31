@@ -1,0 +1,68 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'I3(NH4)'
+_chemical_formula_sum 'I3 (NH4)'
+
+loop_
+_publ_author_name
+ 'G. H. Cheesman'
+ 'A. J. T. Finney'
+_journal_name_full_name
+;
+ Acta Crystallographica Section B: Structural Science
+;
+_journal_volume 26
+_journal_year 1970
+_journal_page_first 904
+_journal_page_last 906
+_publ_Section_title
+;
+ Refinement of the structure of ammonium triiodide, NH$_{4}$I$_{3}$
+;
+
+# Found in The Structure and Stability of Simple Tri-Iodides, {Ph.D. Thesis, University of Tasmania}, 1973
+
+_aflow_title 'NH$_{4}$I$_{3}$ ($D0_{16}$) Structure'
+_aflow_proto 'A3B_oP16_62_3c_c'
+_aflow_params 'a,b/a,c/a,x_{1},z_{1},x_{2},z_{2},x_{3},z_{3},x_{4},z_{4}'
+_aflow_params_values '10.819,0.613735095665,0.89305850818,0.84315,0.15287,0.6188,-0.04894,0.42157,0.76482,0.16484,0.02957'
+_aflow_Strukturbericht '$D0_{16}$'
+_aflow_Pearson 'oP16'
+
+_symmetry_space_group_name_H-M "P 21/n 21/m 21/a"
+_symmetry_Int_Tables_number 62
+ 
+_cell_length_a    10.81900
+_cell_length_b    6.64000
+_cell_length_c    9.66200
+_cell_angle_alpha 90.00000
+_cell_angle_beta  90.00000
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 x+1/2,-y+1/2,-z+1/2
+3 -x,y+1/2,-z
+4 -x+1/2,-y,z+1/2
+5 -x,-y,-z
+6 -x+1/2,y+1/2,z+1/2
+7 x,-y+1/2,z
+8 x+1/2,y,-z+1/2
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+I1 I 4 c 0.84315 0.25000 0.15287 1.00000
+I2 I 4 c 0.61880 0.25000 -0.04894 1.00000
+I3 I 4 c 0.42157 0.25000 0.76482 1.00000
+NH41 NH4 4 c 0.16484 0.25000 0.02957 1.00000

@@ -14,19 +14,19 @@ dependencies:
   - seamm
   
   # Testing
+  - black
   - codecov
   - flake8
   - pytest
   - pytest-cov
 
 
+  # Documentation
+  - pygments
+  
   # Pip-only installs
   - pip:
-    # Testing
-    - yapf
-
     # Documentation
     - rinohtype
-    - pygments
     - sphinx-rtd-theme
     - pystemmer

@@ -1,0 +1,74 @@
+# CIF file 
+data_findsym-output
+_audit_creation_method FINDSYM
+
+_chemical_name_mineral 'Sr(OH)2(H2O)8'
+_chemical_formula_sum '(H2O)8 (OH)2 Sr'
+
+loop_
+_publ_author_name
+ 'G. Natta'
+_journal_name_full_name
+;
+ Gazzetta Chimica Italiana
+;
+_journal_volume 58
+_journal_year 1928
+_journal_page_first 870
+_journal_page_last 872
+_publ_Section_title
+;
+ Constitution of hydroxides and of hydrates. III. Octahydrated strontium hydroxide
+;
+
+# Found in Strukturbericht Band II 1928-1932, 1937
+
+_aflow_title '$E6_{1}$ (Sr(OH)$_{2}$(H$_{2}$O)$_{8}$) ({\em{obsolete}}) Structure'
+_aflow_proto 'A8B2C_tP11_123_r_f_a'
+_aflow_params 'a,c/a,x_{3},z_{3}'
+_aflow_params_values '6.41,0.905928237129,0.29,0.25'
+_aflow_Strukturbericht '$E6_{1}$'
+_aflow_Pearson 'tP11'
+
+_symmetry_space_group_name_H-M "P 4/m 2/m 2/m"
+_symmetry_Int_Tables_number 123
+ 
+_cell_length_a    6.41000
+_cell_length_b    6.41000
+_cell_length_c    5.80700
+_cell_angle_alpha 90.00000
+_cell_angle_beta  90.00000
+_cell_angle_gamma 90.00000
+ 
+loop_
+_space_group_symop_id
+_space_group_symop_operation_xyz
+1 x,y,z
+2 x,-y,-z
+3 -x,y,-z
+4 -x,-y,z
+5 -y,-x,-z
+6 -y,x,z
+7 y,-x,z
+8 y,x,-z
+9 -x,-y,-z
+10 -x,y,z
+11 x,-y,z
+12 x,y,-z
+13 y,x,z
+14 y,-x,-z
+15 -y,x,-z
+16 -y,-x,z
+ 
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_occupancy
+Sr1 Sr 1 a 0.00000 0.00000 0.00000 1.00000
+OH1 OH 2 f 0.00000 0.50000 0.00000 1.00000
+H2O1 H2O 8 r 0.29000 0.29000 0.25000 1.00000
