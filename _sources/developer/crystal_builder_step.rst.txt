@@ -1,0 +1,61 @@
+crystal\_builder\_step package
+==============================
+
+Submodules
+----------
+
+crystal\_builder\_step.crystal\_builder module
+----------------------------------------------
+
+.. automodule:: crystal_builder_step.crystal_builder
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+crystal\_builder\_step.crystal\_builder\_parameters module
+----------------------------------------------------------
+
+.. automodule:: crystal_builder_step.crystal_builder_parameters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+crystal\_builder\_step.crystal\_builder\_step module
+----------------------------------------------------
+
+.. automodule:: crystal_builder_step.crystal_builder_step
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+crystal\_builder\_step.crystal\_metadata module
+-----------------------------------------------
+
+.. automodule:: crystal_builder_step.crystal_metadata
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+crystal\_builder\_step.parse module
+-----------------------------------
+
+.. automodule:: crystal_builder_step.parse
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+crystal\_builder\_step.tk\_crystal\_builder module
+--------------------------------------------------
+
+.. automodule:: crystal_builder_step.tk_crystal_builder
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: crystal_builder_step
+   :members:
+   :undoc-members:
+   :show-inheritance:

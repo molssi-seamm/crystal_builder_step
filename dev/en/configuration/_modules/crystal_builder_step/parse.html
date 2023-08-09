@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>crystal_builder_step.parse &mdash; Crystal Builder Step 2021.10.13+5.gda05a6b documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Crystal Builder Step
+          </a>
+              <div class="version">
+                2021.10.13+5.gda05a6b
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/index.html">User Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Crystal Builder Step</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">crystal_builder_step.parse</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for crystal_builder_step.parse</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+
+<span class="kn">import</span> <span class="nn">CifFile</span>
+<span class="kn">import</span> <span class="nn">openpyxl</span>
+
+<span class="n">subscript</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript Zero}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript One}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript Two}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript Three}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript Four}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript Five}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript Six}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript Seven}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript Eight}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\N{Subscript Nine}</span><span class="s1">&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">bib</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;A3B_hP8_158_d_a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@Article{A3B_hP8_158_d_a,</span>
+<span class="s2">    author =&quot;Fletcher, J. M. and Gardner, W. E. and Fox, A. C. and Topping, G.&quot;,</span>
+<span class="s2">    title  =&quot;X-Ray{,} infrared{,} and magnetic studies of α- and β-ruthenium trichloride&quot;,</span>
+<span class="s2">    journal  =&quot;J. Chem. Soc. A&quot;,</span>
+<span class="s2">    year  =&quot;1967&quot;,</span>
+<span class="s2">    issue  =&quot;0&quot;,</span>
+<span class="s2">    pages  =&quot;1038-1045&quot;,</span>
+<span class="s2">    publisher  =&quot;The Royal Society of Chemistry&quot;,</span>
+<span class="s2">    doi  =&quot;10.1039/J19670001038&quot;,</span>
+<span class="s2">    url  =&quot;http://dx.doi.org/10.1039/J19670001038&quot;</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;A4B_oI20_74_beh_e&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@inbook{A4B_oI20_74_beh_e,</span>
+<span class="s2">    place={Berlin &amp;amp; Heidelberg, Germany},</span>
+<span class="s2">    edition=</span><span class="si">{8th}</span><span class="s2">,</span>
+<span class="s2">    series={Gmelin Handbook of Inorganic and Organometallic Chemistry},</span>
+<span class="s2">    title={Supplement Volume B2},</span>
+<span class="s2">    volume=</span><span class="si">{B2}</span><span class="s2">,</span>
+<span class="s2">    booktitle={Alloys of Uranium with Alkali Metals, Alkaline Earths, and Elements of Main Groups III and IV},</span>
+<span class="s2">    publisher=</span><span class="si">{Springer}</span><span class="s2">,</span>
+<span class="s2">    author={Borgstedt, Hans Ulrich and Wedemeyer, Horst and Buschbeck, Karl-Christian},</span>
+<span class="s2">    year=</span><span class="si">{1989}</span><span class="s2">,</span>
+<span class="s2">    pages={1–333},</span>
+<span class="s2">    collection={Gmelin Handbook of Inorganic and Organometallic Chemistry}</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;A4B_tP10_125_m_a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@article{A4B_tP10_125_m_a,</span>
+<span class="s2">    author = {R. Graham and G. C. S. Waghorn and P. T. Davies},</span>
+<span class="s2">    title = {An X–ray investigation of the lead–platinum system},</span>
+<span class="s2">    journal = {Acta Crystallographica},</span>
+<span class="s2">    year = 1954,</span>
+<span class="s2">    volume = </span><span class="si">{7}</span><span class="s2">,</span>
+<span class="s2">    number = </span><span class="si">{10}</span><span class="s2">,</span>
+<span class="s2">    pages = {634--635},</span>
+<span class="s2">    month = </span><span class="si">{Oct}</span><span class="s2">,</span>
+<span class="s2">    doi = {10.1107/S0365110X54002137},</span>
+<span class="s2">    url = {https://doi.org/10.1107/S0365110X54002137},</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;A2B_oP12_62_2c_c.SrH2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@inbook{A2B_oP12_62_2c_c.SrH2,</span>
+<span class="s2">    author={R. C. Ropp},</span>
+<span class="s2">    title={Encyclopedia of the Alkaline Earth Compounds},</span>
+<span class="s2">    place=</span><span class="si">{Oxford}</span><span class="s2">,</span>
+<span class="s2">    publisher=</span><span class="si">{Elsevier}</span><span class="s2">,</span>
+<span class="s2">    year=2013,</span>
+<span class="s2">    pages={30--31}</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;AB8C2_oC22_35_a_ab3e_e&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@article{AB8C2_oC22_35_a_ab3e_e,</span>
+<span class="s2">    title = {CHEMICAL AND STRUCTURAL INVESTIGATION OF THE AB$sub 2$O$sub 8$</span>
+<span class="s2">             COMPOUNDS OF Mo-V-O, U-V-O, AND U-Mo-O SYSTEMS.},</span>
+<span class="s2">    author = {Mahe-Pailleret, P},</span>
+<span class="s2">    abstractNote = </span><span class="si">{}</span><span class="s2">,</span>
+<span class="s2">    doi = </span><span class="si">{}</span><span class="s2">,</span>
+<span class="s2">    journal = {Rev. Chim. Miner. 7: 807-48(1970).},</span>
+<span class="s2">    number = ,</span>
+<span class="s2">    volume = ,</span>
+<span class="s2">    place = </span><span class="si">{France}</span><span class="s2">,</span>
+<span class="s2">    year = </span><span class="si">{1970}</span><span class="s2">,</span>
+<span class="s2">    month = </span><span class="si">{1}</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;AB_hP6_144_a_a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@article{doi:10.1063/1.46096,</span>
+<span class="s2">    author = {Kusaba,Keiji  and Weidner,Donald J. },</span>
+<span class="s2">    title = {Structure of high pressure phase I in ZnTe},</span>
+<span class="s2">    journal = {AIP Conference Proceedings},</span>
+<span class="s2">    volume = </span><span class="si">{309}</span><span class="s2">,</span>
+<span class="s2">    number = </span><span class="si">{1}</span><span class="s2">,</span>
+<span class="s2">    pages = {553-556},</span>
+<span class="s2">    year = </span><span class="si">{1994}</span><span class="s2">,</span>
+<span class="s2">    doi = {10.1063/1.46096},</span>
+<span class="s2">    URL = {https://aip.scitation.org/doi/abs/10.1063/1.46096},</span>
+<span class="s2">    eprint = {https://aip.scitation.org/doi/pdf/10.1063/1.46096}</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;A12B36CD12_cF488_210_h_3h_a_fg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@article{A12B36CD12_cF488_210_h_3h_a_fg,</span>
+<span class="s2">    author = {Tiritiris, Ioannis and Schleid, Thomas},</span>
+<span class="s2">    title = {Synthesis, Crystal Structure, and Thermal Decomposition of Mg(H2O)6 [B12H12]×6H2O.},</span>
+<span class="s2">    journal = </span><span class="si">{ChemInform}</span><span class="s2">,</span>
+<span class="s2">    volume = </span><span class="si">{35}</span><span class="s2">,</span>
+<span class="s2">    number = </span><span class="si">{25}</span><span class="s2">,</span>
+<span class="s2">    pages = </span><span class="si">{}</span><span class="s2">,</span>
+<span class="s2">    doi = {10.1002/chin.200425008},</span>
+<span class="s2">    url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/chin.200425008},</span>
+<span class="s2">    eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/chin.200425008},</span>
+<span class="s2">    abstract = {Abstract For Abstract see ChemInform Abstract in Full Text.},</span>
+<span class="s2">    year = </span><span class="si">{2004}</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;AB3_tP32_86_g_3g&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@article{AB3_tP32_86_g_3g,</span>
+<span class="s2">  title={PHASE DIAGRAM OF THE TITANIUM-PHOSPHORUS SYSTEM},</span>
+<span class="s2">  author={EREMENKO, VN and LISTOVNICHII, VE},</span>
+<span class="s2">  journal={DOPOVIDI AKAD NAUK UKR SSR},</span>
+<span class="s2">  number=</span><span class="si">{9}</span><span class="s2">,</span>
+<span class="s2">  pages={1176--1179},</span>
+<span class="s2">  year=</span><span class="si">{1965}</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;AB32CD4E8_tP184_93_i_16p_af_2p_4p&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@article{AB32CD4E8_tP184_93_i_16p_af_2p_4p,</span>
+<span class="s2">  title={Crystal and molecular structures of [AsPh 4][Ln (S 2 PMe 2) 4](Ln= Ce or Tm) and their comparison with results obtained from paramagnetic nuclear magnetic resonance data in solution},</span>
+<span class="s2">  author={Spiliadis, Stavros and Pinkerton, A Alan and Schwarzenbach, Dieter},</span>
+<span class="s2">  journal={Journal of the Chemical Society, Dalton Transactions},</span>
+<span class="s2">  number=</span><span class="si">{9}</span><span class="s2">,</span>
+<span class="s2">  pages={1809--1813},</span>
+<span class="s2">  year=</span><span class="si">{1982}</span><span class="s2">,</span>
+<span class="s2">  publisher={Royal Society of Chemistry}</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;A3B_oC64_66_gi2lm_2l&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@article{A3B_oC64_66_gi2lm_2l,</span>
+<span class="s2">  title={Pressure-induced metallization of dense (H 2 S) 2 H 2 with high-Tc  superconductivity},</span>
+<span class="s2">  author={Duan, Defang and Liu, Yunxian and Tian, Fubo and Li, Da and Huang, Xiaoli and Zhao, Zhonglong and Yu, Hongyu and Liu, Bingbing and Tian, Wenjing and Cui, Tian},</span>
+<span class="s2">  journal={Scientific reports},</span>
+<span class="s2">  volume=</span><span class="si">{4}</span><span class="s2">,</span>
+<span class="s2">  pages=</span><span class="si">{6968}</span><span class="s2">,</span>
+<span class="s2">  year=</span><span class="si">{2014}</span><span class="s2">,</span>
+<span class="s2">  publisher={Nature Publishing Group}</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+
+<span class="n">bib</span><span class="p">[</span><span class="s1">&#39;ABC2_hP4_164_a_b_d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">@phdthesis{ABC2_hP4_164_a_b_d,</span>
+<span class="s2">  title={Intermetallic compounds by reductive annealing},</span>
+<span class="s2">  author={Kift, Rebecca Louise},</span>
+<span class="s2">  year=</span><span class="si">{2010}</span><span class="s2">,</span>
+<span class="s2">  school={University of Hull}</span>
+<span class="s2">}</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="formula_subscripts"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.formula_subscripts">[docs]</a><span class="k">def</span> <span class="nf">formula_subscripts</span><span class="p">(</span><span class="n">formula</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">formula</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="s1">&#39;0123456789&#39;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">subscript</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">char</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">char</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;prototypes.xlsx&#39;</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">wb</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="p">[</span><span class="s1">&#39;Sheet1&#39;</span><span class="p">]</span>
+
+    <span class="n">row_max</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">max_row</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;prototype&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;nSpecies&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;nAtoms&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;Pearson symbol&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;Strukturbericht designation&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;AFLOW prototype&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;space group symbol&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;space group number&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s1">&#39;notes&#39;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+    <span class="n">hyperlink</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">ws</span><span class="o">.</span><span class="n">iter_rows</span><span class="p">(</span><span class="n">min_row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_row</span><span class="o">=</span><span class="n">row_max</span><span class="p">):</span>
+        <span class="n">hyperlink</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hyperlink</span><span class="o">.</span><span class="n">display</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cell</span><span class="p">,</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;hyperlink&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hyperlink</span>
+
+    <span class="c1"># Now clean up the data</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Characters in notes</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;notes&#39;</span><span class="p">]:</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\u00a0</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;notes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+
+    <span class="c1"># Subscripts in formulas of prototypes</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;prototype&#39;</span><span class="p">]:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">formula_subscripts</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;prototype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+
+    <span class="c1"># doubling of Strukturbericht designations</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Strukturbericht designation&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">length</span><span class="p">]</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Strukturbericht designation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+
+    <span class="c1"># doubling of space group symbols</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;space group symbol&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">length</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\u00af</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\N{Combining Overline}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;space group symbol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;prototypes.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="download"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.download">[docs]</a><span class="k">def</span> <span class="nf">download</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download the CIF files from AFLOW&quot;&quot;&quot;</span>
+    <span class="c1"># Get the data from the json</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;prototypes.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+
+    <span class="c1"># Fetch the cif file</span>
+    <span class="k">for</span> <span class="n">hyperlink</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;hyperlink&#39;</span><span class="p">]:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">hyperlink</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">path</span>
+        <span class="n">root</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">root</span> <span class="o">+</span> <span class="s1">&#39;.cif&#39;</span>
+        <span class="n">new_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;prototypes&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_path</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">new_url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="n">hyperlink</span><span class="p">,</span> <span class="s1">&#39;CIF/&#39;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">new_url</span><span class="si">}</span><span class="s1"> --&gt; </span><span class="si">{</span><span class="n">new_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">new_url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">new_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;#### Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_bibtex"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.get_bibtex">[docs]</a><span class="k">def</span> <span class="nf">get_bibtex</span><span class="p">(</span><span class="n">prototype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the BibTex for the prototype</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    @article{doi:10.1139/v68-576,</span>
+<span class="sd">        author = {Knop, Osvald and Reid, K. I. G. and Sutarno and Nakagawa,</span>
+<span class="sd">                 Yasuaki},</span>
+<span class="sd">        title = {Chalkogenides of the transition elements. VI. X-Ray, neutron,</span>
+<span class="sd">                 and magnetic investigation of the spinels Co3O4, NiCo2O4,</span>
+<span class="sd">                 Co3S4, and NiCo2S4},</span>
+<span class="sd">        journal = {Canadian Journal of Chemistry},</span>
+<span class="sd">        volume = {46},</span>
+<span class="sd">        number = {22},</span>
+<span class="sd">        pages = {3463-3476},</span>
+<span class="sd">        year = {1968},</span>
+<span class="sd">    }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cif</span> <span class="o">=</span> <span class="n">CifFile</span><span class="o">.</span><span class="n">ReadCif</span><span class="p">(</span><span class="n">prototype</span> <span class="o">+</span> <span class="s1">&#39;.cif&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error in </span><span class="si">{</span><span class="n">prototype</span><span class="si">}</span><span class="s1">.cif</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">cif</span><span class="p">[</span><span class="s1">&#39;findsym-output&#39;</span><span class="p">]</span>
+    <span class="n">authors</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;_publ_author_name&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;_journal_name_full&#39;</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+        <span class="n">journal</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;_journal_name_full&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">journal</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;_journal_name_full_name&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;_journal_volume&#39;</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;_journal_volume&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="s1">&#39;n/a&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prototype</span><span class="si">}</span><span class="s1"> has no journal volume&#39;</span><span class="p">)</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;_journal_year&#39;</span><span class="p">]</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;_journal_page_first&#39;</span><span class="p">]</span>
+    <span class="n">last</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;_journal_page_last&#39;</span><span class="p">]</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;_publ_Section_title&#39;</span><span class="p">]</span>
+
+    <span class="n">author_list</span> <span class="o">=</span> <span class="s1">&#39; and &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">authors</span><span class="p">)</span>
+    <span class="n">pages</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">first</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">last</span><span class="si">}</span><span class="s1">&#39;</span>
+
+    <span class="n">template</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">        @article{$prototype,</span>
+<span class="sd">        author = {$author_list},</span>
+<span class="sd">        title = {$title},</span>
+<span class="sd">        journal = {$journal},</span>
+<span class="sd">        volume = {$volume},</span>
+<span class="sd">        pages = {$pages},</span>
+<span class="sd">        year = $year,</span>
+<span class="sd">        }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">citation</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+        <span class="n">prototype</span><span class="o">=</span><span class="n">prototype</span><span class="p">,</span>
+        <span class="n">author_list</span><span class="o">=</span><span class="n">author_list</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+        <span class="n">journal</span><span class="o">=</span><span class="n">journal</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+        <span class="n">volume</span><span class="o">=</span><span class="n">volume</span><span class="p">,</span>
+        <span class="n">pages</span><span class="o">=</span><span class="n">pages</span><span class="p">,</span>
+        <span class="n">year</span><span class="o">=</span><span class="n">year</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">citation</span></div>
+
+
+<div class="viewcode-block" id="test"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">bibtexparser</span>
+    <span class="kn">import</span> <span class="nn">reference_handler</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;references.bib&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">bibtexparser</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">entries_dict</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">bibtexparser</span><span class="o">.</span><span class="n">bwriter</span><span class="o">.</span><span class="n">BibTexWriter</span><span class="p">()</span>
+    <span class="n">biblio</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">biblio</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">_entry_to_bibtex</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">references</span> <span class="o">=</span> <span class="n">reference_handler</span><span class="o">.</span><span class="n">Reference_Handler</span><span class="p">(</span><span class="s1">&#39;:memory:&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">citation</span> <span class="ow">in</span> <span class="n">biblio</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+            <span class="n">raw</span><span class="o">=</span><span class="n">citation</span><span class="p">,</span>
+            <span class="n">alias</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+            <span class="n">module</span><span class="o">=</span><span class="s1">&#39;parser&#39;</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">note</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;The principle citation for </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">citations</span> <span class="o">=</span> <span class="n">references</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;text&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">citation</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">citations</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">citation</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="kn">import</span> <span class="nn">os.path</span>
+    <span class="kn">import</span> <span class="nn">urllib.error</span>
+    <span class="kn">import</span> <span class="nn">urllib.parse</span>
+    <span class="kn">import</span> <span class="nn">urllib.request</span>
+
+    <span class="n">test</span><span class="p">()</span>
+
+    <span class="c1"># if True:</span>
+    <span class="c1">#     test()</span>
+    <span class="c1"># elif False:</span>
+    <span class="c1">#     bibtex = &#39;&#39;</span>
+    <span class="c1">#     with open(&#39;prototypes.json&#39;, &#39;r&#39;) as fd:</span>
+    <span class="c1">#         data = json.load(fd)</span>
+
+    <span class="c1">#     for prototype in data[&#39;AFLOW prototype&#39;]:</span>
+    <span class="c1">#         print(prototype)</span>
+    <span class="c1">#         if prototype in bib:</span>
+    <span class="c1">#             text = bib[prototype]</span>
+    <span class="c1">#         else:</span>
+    <span class="c1">#             text = get_bibtex(prototype)</span>
+    <span class="c1">#         bibtex += text</span>
+    <span class="c1">#     with open(&#39;references2.bib&#39;, &#39;w&#39;) as fd:</span>
+    <span class="c1">#         fd.write(bibtex)</span>
+    <span class="c1"># elif False:</span>
+    <span class="c1">#     run()</span>
+    <span class="c1"># elif False:</span>
+    <span class="c1">#     # Fix the prototypes to have added formula part in some cases</span>
+    <span class="c1">#     # Get the data from the json</span>
+    <span class="c1">#     with open(&#39;prototypes.json&#39;, &#39;r&#39;) as fd:</span>
+    <span class="c1">#         data = json.load(fd)</span>
+
+    <span class="c1">#     aflow_prototypes = []</span>
+    <span class="c1">#     for hyperlink in data[&#39;hyperlink&#39;]:</span>
+    <span class="c1">#         url = urllib.parse.urlsplit(hyperlink)</span>
+    <span class="c1">#         path = url.path</span>
+    <span class="c1">#         root, extension = os.path.splitext(os.path.basename(path))</span>
+    <span class="c1">#         aflow_prototypes.append(root)</span>
+
+    <span class="c1">#     data[&#39;AFLOW prototype&#39;] = aflow_prototypes</span>
+
+    <span class="c1">#     with open(&#39;prototypes2.json&#39;, &#39;w&#39;) as fd:</span>
+    <span class="c1">#         json.dump(data, fd, indent=4)</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     # Get the data from the json</span>
+    <span class="c1">#     with open(&#39;prototypes2.json&#39;, &#39;r&#39;) as fd:</span>
+    <span class="c1">#         data = json.load(fd)</span>
+
+    <span class="c1">#     cp = data[&#39;cell parameters&#39;] = []</span>
+    <span class="c1">#     sites = data[&#39;sites&#39;] = []</span>
+    <span class="c1">#     # Fetch the cif file to get the adjustable parameters</span>
+    <span class="c1">#     for hyperlink in data[&#39;hyperlink&#39;]:</span>
+    <span class="c1">#         url = urllib.parse.urlsplit(hyperlink)</span>
+    <span class="c1">#         path = url.path</span>
+    <span class="c1">#         root, extension = os.path.splitext(os.path.basename(path))</span>
+    <span class="c1">#         filename = root + &#39;.cif&#39;</span>
+    <span class="c1">#         new_path = os.path.join(&#39;.&#39;, filename)</span>
+    <span class="c1">#         if not os.path.exists(new_path):</span>
+    <span class="c1">#             print(f&#39;{new_path} does not exist&#39;)</span>
+    <span class="c1">#         else:</span>
+    <span class="c1">#             try:</span>
+    <span class="c1">#                 cif = CifFile.ReadCif(new_path)</span>
+    <span class="c1">#             except Exception:</span>
+    <span class="c1">#                 print(f&#39;Error in {new_path}\n\n&#39;)</span>
+    <span class="c1">#                 raise</span>
+    <span class="c1">#             tmp = cif[&#39;findsym-output&#39;]</span>
+    <span class="c1">#             params = tmp[&#39;_aflow_params&#39;].split(&#39;,&#39;)</span>
+    <span class="c1">#             values = tmp[&#39;_aflow_params_values&#39;].split(&#39;,&#39;)</span>
+
+    <span class="c1">#             cell_parameters = []</span>
+    <span class="c1">#             for param, value in zip(params, values):</span>
+    <span class="c1">#                 if param[0] in (&#39;x&#39;, &#39;y&#39;, &#39;z&#39;):</span>
+    <span class="c1">#                     break</span>
+    <span class="c1">#                 if param[0] == &#39;\\&#39;:</span>
+    <span class="c1">#                     cell_parameters.append((param[1:], value))</span>
+    <span class="c1">#                 elif param == &#39;b/a&#39;:</span>
+    <span class="c1">#                     cell_parameters.append((&#39;b&#39;, tmp[&#39;_cell_length_b&#39;]))</span>
+    <span class="c1">#                 elif param == &#39;c/a&#39;:</span>
+    <span class="c1">#                     cell_parameters.append((&#39;c&#39;, tmp[&#39;_cell_length_c&#39;]))</span>
+    <span class="c1">#                 else:</span>
+    <span class="c1">#                     cell_parameters.append((param, value))</span>
+    <span class="c1">#             cp.append(cell_parameters)</span>
+
+    <span class="c1">#             site_data = []</span>
+    <span class="c1">#             for symbol, site, mult in zip(</span>
+    <span class="c1">#                 tmp[&#39;_atom_site_type_symbol&#39;],</span>
+    <span class="c1">#                 tmp[&#39;_atom_site_Wyckoff_label&#39;],</span>
+    <span class="c1">#                 tmp[&#39;_atom_site_symmetry_multiplicity&#39;]</span>
+    <span class="c1">#             ):</span>
+    <span class="c1">#                 site_data.append((site, int(mult), symbol))</span>
+    <span class="c1">#             sites.append(site_data)</span>
+
+    <span class="c1">#     with open(&#39;prototypes3.json&#39;, &#39;w&#39;) as fd:</span>
+    <span class="c1">#         json.dump(data, fd, indent=4)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020-2021, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under awards OAC-1547580
+    and CHE-2136142.
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

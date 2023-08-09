@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>crystal_builder_step.parse &mdash; Crystal Builder Step 2022.7.31 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Crystal Builder Step
+          </a>
+              <div class="version">
+                2022.7.31
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/index.html">User Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Crystal Builder Step</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">crystal_builder_step.parse</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for crystal_builder_step.parse</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="sd">&quot;&quot;&quot;Process the prototype data from the AFLOW library.</span>
+
+<span class="sd">Steps:</span>
+
+<span class="sd">1) Manually get the tabular data from the index page</span>
+<span class="sd">   http://aflowlib.org/prototype-encyclopedia/prototype_index.html</span>
+
+<span class="sd">   I did this by opening in Safari, using the Developer module to show the sources,</span>
+<span class="sd">   open the scripts in th left panel, and downloading table_sort.min.js</span>
+
+<span class="sd">   In an editor, I copied the array u from the text &#39;u=[...],v=[]&#39; by search from the</span>
+<span class="sd">   bracket in &#39;u=[&#39; to &#39;v=[]&#39; and then backup up to closing bracket of the u-array.</span>
+
+<span class="sd">   I used black to format it so that I could see the data more nicely. This file is</span>
+<span class="sd">   &#39;index.json&#39;</span>
+
+<span class="sd">   I also had to enclose `Prototype` and `Notes` to make correct JSON. And there are</span>
+<span class="sd">   a couple places where quoted strings have &quot;, so are quoted with &#39;. I flipped the</span>
+<span class="sd">   quotes to make &quot;good&quot; json.</span>
+
+<span class="sd">   I manually patched the 4 special case in the index.json file::</span>
+
+<span class="sd">       &quot;A_hR1_166_a Hg&quot;: &quot;A_hR1_166_a.alpha-Hg&quot;,</span>
+<span class="sd">       &quot;A_hR1_166_a Po&quot;: &quot;A_hR1_166_a.beta-Po&quot;,</span>
+<span class="sd">       &quot;AB_mP32_14_4e_4e AsS&quot;: &quot;AB_mP32_14_4e_4e.realgar&quot;,</span>
+<span class="sd">       &quot;AB_mP32_14_4e_4e AsS&quot;: &quot;AB_mP32_14_4e_4e.pararealgar&quot;,</span>
+<span class="sd">       &quot;AB_cP2_221_a_b H4NNO3&quot;: &quot;AB_cP2_221_a_b.NH4.NO3&quot;,</span>
+
+<span class="sd">2) The `download` function then downloads any CIF files to the CIF/ subdirectory. It</span>
+<span class="sd">   only downloads missing files. The url is like this</span>
+
+<span class="sd">   http://aflowlib.org/prototype-encyclopedia/CIF/&lt;AFLOW prototype&gt;.cif</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">import</span> <span class="nn">CifFile</span>
+
+<span class="n">GreekLetters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">alpha&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Alpha}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">beta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Beta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">gamma&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Gamma}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">delta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Delta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">epsilon&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Epsilon}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">zeta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Zeta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">eta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Eta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">theta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Theta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">iota&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Iota}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">kappa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Kappa}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">lamda&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Lamda}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">mu&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Mu}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">nu&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Nu}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">xi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Xi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">omicron&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Omicron}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">pi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Pi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rho&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Rho}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">sigma&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Sigma}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">tau&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Tau}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">upsilon&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Upsilon}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">phi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Phi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">chi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Chi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">psi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Psi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">omega&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Small Letter Omega}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Alpha&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Alpha}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Beta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Beta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Gamma&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Gamma}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Delta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Delta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Epsilon&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Epsilon}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Zeta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Zeta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Eta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Eta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Theta&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Theta}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Iota&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Iota}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Kappa&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Kappa}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Lamda&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Lamda}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Mu&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Mu}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Nu&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Nu}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Xi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Xi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Omicron&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Omicron}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Pi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Pi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Rho&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Rho}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Sigma&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Sigma}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Tau&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Tau}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Upsilon&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Upsilon}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Phi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Phi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Chi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Chi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Psi&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Psi}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">Omega&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Greek Capital Letter Omega}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">subscripts</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;0&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Zero}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript One}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Two}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Three}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Four}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;5&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Five}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;6&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Six}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;7&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Seven}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;8&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Eight}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;9&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Nine}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;+&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Plus Sign}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;-&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Minus}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;=&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Equals Sign}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;(&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Left Parenthesis}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;)&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Subscript Right Parenthesis}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter A}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;e&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter E}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;o&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter O}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter X}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;h&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter H}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter K}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter L}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter M}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter N}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter P}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter S}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\N{Latin Subscript Small Letter T}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;.&quot;</span><span class="p">:</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">references</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">@Misc{ crystal_builder_step,</span>
+<span class="s2">        author = {Paul Saxe},</span>
+<span class="s2">        title = {Crystal Builder plug-in for SEAMM},</span>
+<span class="s2">        month = {$month},</span>
+<span class="s2">        year = {$year},</span>
+<span class="s2">        organization = {The Molecular Sciences Software Institute (MolSSI)},</span>
+<span class="s2">        url = {https://github.com/molssi-seamm/crystal_builder_step},</span>
+<span class="s2">        address = {Virginia Tech, Blacksburg, VA, USA},</span>
+<span class="s2">        version = {$version}</span>
+<span class="s2">}</span>
+
+<span class="s2">@article{MEHL2017S1,</span>
+<span class="s2">    title = &quot;The AFLOW Library of Crystallographic Prototypes: Part 1&quot;,</span>
+<span class="s2">    journal = &quot;Computational Materials Science&quot;,</span>
+<span class="s2">    volume = &quot;136&quot;,</span>
+<span class="s2">    pages = &quot;S1 - S828&quot;,</span>
+<span class="s2">    year = &quot;2017&quot;,</span>
+<span class="s2">    issn = &quot;0927-0256&quot;,</span>
+<span class="s2">    doi = &quot;https://doi.org/10.1016/j.commatsci.2017.01.017&quot;,</span>
+<span class="s2">    url = &quot;http://www.sciencedirect.com/science/article/pii/S0927025617300241&quot;,</span>
+<span class="s2">    author = &quot;Michael J. Mehl and David Hicks and Cormac Toher and Ohad Levy and Robert M. Hanson and Gus Hart and Stefano Curtarolo&quot;,</span>
+<span class="s2">    keywords = &quot;Crystal Structure, Space Groups, Wyckoff Positions, Lattice Vectors, Basis Vectors, Database&quot;,</span>
+<span class="s2">}</span>
+
+<span class="s2">@article{HICKS2019S1,</span>
+<span class="s2">    title = &quot;The AFLOW Library of Crystallographic Prototypes: Part 2&quot;,</span>
+<span class="s2">    journal = &quot;Computational Materials Science&quot;,</span>
+<span class="s2">    volume = &quot;161&quot;,</span>
+<span class="s2">    pages = &quot;S1 - S1011&quot;,</span>
+<span class="s2">    year = &quot;2019&quot;,</span>
+<span class="s2">    issn = &quot;0927-0256&quot;,</span>
+<span class="s2">    doi = &quot;https://doi.org/10.1016/j.commatsci.2018.10.043&quot;,</span>
+<span class="s2">    url = &quot;http://www.sciencedirect.com/science/article/pii/S0927025618307146&quot;,</span>
+<span class="s2">    author = &quot;David Hicks and Michael J. Mehl and Eric Gossett and Cormac Toher and Ohad Levy and Robert M. Hanson and Gus Hart and Stefano Curtarolo&quot;,</span>
+<span class="s2">    keywords = &quot;Crystal Structure, Space Groups, Wyckoff Positions, Lattice Vectors, Basis Vectors, Database&quot;,</span>
+<span class="s2">}</span>
+
+<span class="s2">@article{HICKS2021110450,</span>
+<span class="s2">    title = {The AFLOW Library of Crystallographic Prototypes: Part 3},</span>
+<span class="s2">    journal = {Computational Materials Science},</span>
+<span class="s2">    volume = </span><span class="si">{199}</span><span class="s2">,</span>
+<span class="s2">    pages = </span><span class="si">{110450}</span><span class="s2">,</span>
+<span class="s2">    year = </span><span class="si">{2021}</span><span class="s2">,</span>
+<span class="s2">    issn = {0927-0256},</span>
+<span class="s2">    doi = {https://doi.org/10.1016/j.commatsci.2021.110450},</span>
+<span class="s2">    url = {https://www.sciencedirect.com/science/article/pii/S0927025621001750},</span>
+<span class="s2">    author = {David Hicks and Michael J. Mehl and Marco Esters and Corey Oses and Ohad Levy and Gus L.W. Hart and Cormac Toher and Stefano Curtarolo},</span>
+<span class="s2">    keywords = {Crystal Structure, Space Groups, Wyckoff Positions, Lattice Vectors, Basis Vectors, Database},</span>
+<span class="s2">    abstract = {The AFLOW Library of Crystallographic Prototypes has been extended to include a total of 1,100 common crystal structural prototypes (510 new ones with Part 3), comprising all of the inorganic crystal structures defined in the seven-volume Strukturbericht series published in Germany from 1937 through 1943. We cover a history of the Strukturbericht designation system, the evolution of the system over time, and the first comprehensive index of inorganic Strukturbericht designations ever published.}</span>
+<span class="s2">}&quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+
+
+<div class="viewcode-block" id="clean_text"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.clean_text">[docs]</a><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Replace subscripts and other special characters.&quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&amp;ndash;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\N{En Dash}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&amp;frasl;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\N{Fraction Slash}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&amp;middot;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\N{Middle Dot}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&amp;cacute;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\N{Latin Small Letter C with Acute}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&amp;auml;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\N{Latin Small Letter A with Diaeresis}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&amp;uuml;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\N{Latin Small Letter U with Diaeresis}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&amp;approx;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\N{Almost Equal To}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;em&gt;([^&lt;]+)&lt;/em&gt;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;*\1*&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;sub&gt;([^&lt;]+)&lt;/sub&gt;&quot;</span><span class="p">,</span> <span class="n">subscript_helper</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;q&gt;([^&lt;]+)&lt;/q&gt;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&quot;\1&quot;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">&quot;&lt;sup&gt;II&lt;/sup&gt;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;</span><span class="se">\N{Modifier Letter Capital I}\N{Modifier Letter Capital I}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\u00a0</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">math_mode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="subscript_helper"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.subscript_helper">[docs]</a><span class="k">def</span> <span class="nf">subscript_helper</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">subscripts</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">subscripts</span><span class="p">[</span><span class="n">char</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># print(f&quot;There is no unicode subscript for &#39;{char}&#39;&quot;)</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">char</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="entry_to_string"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.entry_to_string">[docs]</a><span class="k">def</span> <span class="nf">entry_to_string</span><span class="p">(</span><span class="n">cif</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a cif entry to a string.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cif</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cif</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cif</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cif</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="simple_spacegroup"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.simple_spacegroup">[docs]</a><span class="k">def</span> <span class="nf">simple_spacegroup</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate LATeX math mode to Unicode.&quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;_\{([^}]+)}&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\1&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">bar{(.)}&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;-\1&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="math_mode"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.math_mode">[docs]</a><span class="k">def</span> <span class="nf">math_mode</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate LATeX math mode to Unicode.&quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;_\{([^}]+)}&quot;</span><span class="p">,</span> <span class="n">subscript_helper</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\$([^$]+)\$&quot;</span><span class="p">,</span> <span class="n">math_mode_helper</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">le&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\N{Less-Than or Equal To}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="math_mode_helper"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.math_mode_helper">[docs]</a><span class="k">def</span> <span class="nf">math_mode_helper</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">bar{(.)}&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">1</span><span class="se">\N{Combining Overline}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">replacement</span> <span class="ow">in</span> <span class="n">GreekLetters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">replacement</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="to_bibtex"><a class="viewcode-back" href="../../developer/crystal_builder_step.html#crystal_builder_step.parse.to_bibtex">[docs]</a><span class="k">def</span> <span class="nf">to_bibtex</span><span class="p">(</span><span class="n">prototype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract the reference information and transform to BibTeX.&quot;&quot;&quot;</span>
+
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;CIF&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">prototype</span> <span class="o">+</span> <span class="s2">&quot;.cif&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">CifFile</span><span class="o">.</span><span class="n">ReadCif</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">cif</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># pprint.pprint({**cif})</span>
+
+        <span class="k">if</span> <span class="s2">&quot;_publ_author_name&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cif</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;@article{&quot;</span> <span class="o">+</span> <span class="n">prototype</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_publ_author_name&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;   author = {&quot;</span> <span class="o">+</span> <span class="n">tmp</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;   author = {&quot;</span> <span class="o">+</span> <span class="s2">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+
+        <span class="n">title</span> <span class="o">=</span> <span class="n">entry_to_string</span><span class="p">(</span><span class="n">cif</span><span class="p">,</span> <span class="s2">&quot;_publ_Section_title&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;   title = {&quot;</span> <span class="o">+</span> <span class="n">title</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+
+        <span class="n">journal</span> <span class="o">=</span> <span class="n">entry_to_string</span><span class="p">(</span><span class="n">cif</span><span class="p">,</span> <span class="s2">&quot;_journal_name_full_name&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">journal</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;   journal = {&quot;</span> <span class="o">+</span> <span class="n">journal</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">entry_to_string</span><span class="p">(</span><span class="n">cif</span><span class="p">,</span> <span class="s2">&quot;_journal_volume&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">volume</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;   volume = {&quot;</span> <span class="o">+</span> <span class="n">volume</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+
+        <span class="n">page_first</span> <span class="o">=</span> <span class="n">entry_to_string</span><span class="p">(</span><span class="n">cif</span><span class="p">,</span> <span class="s2">&quot;_journal_page_first&quot;</span><span class="p">)</span>
+        <span class="n">page_last</span> <span class="o">=</span> <span class="n">entry_to_string</span><span class="p">(</span><span class="n">cif</span><span class="p">,</span> <span class="s2">&quot;_journal_page_last&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">page_first</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">page_last</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;   pages = {&quot;</span> <span class="o">+</span> <span class="n">page_first</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;   pages = {&quot;</span> <span class="o">+</span> <span class="n">page_first</span> <span class="o">+</span> <span class="s2">&quot;--&quot;</span> <span class="o">+</span> <span class="n">page_last</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">)</span>
+
+        <span class="n">year</span> <span class="o">=</span> <span class="n">entry_to_string</span><span class="p">(</span><span class="n">cif</span><span class="p">,</span> <span class="s2">&quot;_journal_year&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;   year = &quot;</span> <span class="o">+</span> <span class="n">year</span><span class="p">)</span>
+
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s2">&quot;,</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="c1"># Read the array of prototypes.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;index.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">prototypes</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">prototypes</span><span class="p">)</span><span class="si">}</span><span class="s2"> prototypes.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading any CIF files that are missing.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Download the CIF files</span>
+    <span class="n">cifdir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;CIF&quot;</span><span class="p">)</span>
+    <span class="n">cifdir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">pset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Prototype&quot;</span><span class="p">]</span>
+        <span class="c1"># Ufff. Name may have html &lt;sub&gt; &lt;/sub&gt;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;sub&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;/sub&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">prototype</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;AFLOW Prototype&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">prototype</span> <span class="ow">in</span> <span class="n">pset</span><span class="p">:</span>
+            <span class="c1"># print(f&quot;{prototype} is a duplicate&quot;)</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prototype</span><span class="p">)</span>
+
+        <span class="n">ciffile</span> <span class="o">=</span> <span class="n">cifdir</span> <span class="o">/</span> <span class="p">(</span><span class="n">prototype</span> <span class="o">+</span> <span class="s2">&quot;.cif&quot;</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ciffile</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"> Downloading CIF for </span><span class="si">{</span><span class="n">prototype</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://aflowlib.org/prototype-encyclopedia/CIF/</span><span class="si">{</span><span class="n">prototype</span><span class="si">}</span><span class="s2">.cif&quot;</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">requests</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                <span class="n">ciffile</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># It appears that when there are multiple entries, the protoype is</span>
+                <span class="c1"># appended</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;http://aflowlib.org/prototype-encyclopedia/CIF/</span><span class="si">{</span><span class="n">prototype</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot;.cif&quot;</span>
+                <span class="p">)</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">requests</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                    <span class="n">ciffile</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      status = </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">r</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># Process the citations</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">cifdir</span> <span class="o">/</span> <span class="s2">&quot;references.bib&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing references to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">references</span><span class="p">)</span>
+
+        <span class="n">pset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">:</span>
+            <span class="n">prototype</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;AFLOW Prototype&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">prototype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pset</span><span class="p">:</span>
+                <span class="n">pset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prototype</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="n">to_bibtex</span><span class="p">(</span><span class="n">prototype</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in </span><span class="si">{</span><span class="n">prototype</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No reference information for </span><span class="si">{</span><span class="n">prototype</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Now create the metadata for the plug-in.</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;prototypes.json&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing the metadata to </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="n">jdata</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">max_sites</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;prototype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">clean_text</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Prototype&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;nSpecies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;# Species&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;nAtoms&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;# Atoms&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Pearson symbol&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Pearson Symbol&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Strukturbericht designation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="kc">None</span> <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;Struk. Design.&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span> <span class="k">else</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Struk. Design.&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span>
+    <span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;AFLOW prototype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;AFLOW Prototype&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;space group symbol&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">clean_text</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Space Group Symbol&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span>
+    <span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;space group number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Space Group Number&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;notes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">clean_text</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Notes&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;hyperlink&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s2">&quot;http://www.aflowlib.org/CrystalDatabase/</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;AFLOW Prototype&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.html&quot;</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">prototypes</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Add cell and site info.</span>
+    <span class="n">cp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;cell parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sites</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sites&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">pdata</span> <span class="ow">in</span> <span class="n">prototypes</span><span class="p">:</span>
+        <span class="n">prototype</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;AFLOW Prototype&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">prototype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pset</span><span class="p">:</span>
+            <span class="n">pset</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prototype</span><span class="p">)</span>
+
+            <span class="n">cif_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;CIF&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">prototype</span> <span class="o">+</span> <span class="s2">&quot;.cif&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cif_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">CifFile</span><span class="o">.</span><span class="n">ReadCif</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Problem with </span><span class="si">{</span><span class="n">cif_path</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">tmp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Problem with </span><span class="si">{</span><span class="n">cif_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">cif</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="s2">&quot;_aflow_params&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cif</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No aflow parameters in </span><span class="si">{</span><span class="n">prototype</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">params</span> <span class="o">=</span> <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_aflow_params&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                    <span class="n">values</span> <span class="o">=</span> <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_aflow_params_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+                <span class="n">cell_parameters</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">adjustable</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                    <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="s2">&quot;_aflow_params&quot;</span> <span class="ow">in</span> <span class="n">cif</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;_{&quot;</span><span class="p">:</span>
+                                <span class="n">site_no</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                                <span class="n">adjustable</span><span class="p">[</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">site_no</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">site_no</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+                                <span class="n">adjustable</span><span class="p">[</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">site_no</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                        <span class="k">elif</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">:</span>
+                            <span class="n">cell_parameters</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">value</span><span class="p">))</span>
+                        <span class="k">elif</span> <span class="n">param</span> <span class="o">==</span> <span class="s2">&quot;b/a&quot;</span><span class="p">:</span>
+                            <span class="n">cell_parameters</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_cell_length_b&quot;</span><span class="p">]))</span>
+                        <span class="k">elif</span> <span class="n">param</span> <span class="o">==</span> <span class="s2">&quot;c/a&quot;</span><span class="p">:</span>
+                            <span class="n">cell_parameters</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_cell_length_c&quot;</span><span class="p">]))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">cell_parameters</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+                <span class="n">cp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell_parameters</span><span class="p">)</span>
+
+                <span class="n">site_data</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">site_no</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">mult</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                    <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_atom_site_type_symbol&quot;</span><span class="p">],</span>
+                    <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_atom_site_Wyckoff_label&quot;</span><span class="p">],</span>
+                    <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_atom_site_symmetry_multiplicity&quot;</span><span class="p">],</span>
+                    <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_atom_site_fract_x&quot;</span><span class="p">],</span>
+                    <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_atom_site_fract_y&quot;</span><span class="p">],</span>
+                    <span class="n">cif</span><span class="p">[</span><span class="s2">&quot;_atom_site_fract_z&quot;</span><span class="p">],</span>
+                <span class="p">):</span>
+                    <span class="n">site_no</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">site_no</span> <span class="ow">in</span> <span class="n">adjustable</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]:</span>
+                        <span class="n">x</span> <span class="o">=</span> <span class="n">adjustable</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="n">site_no</span><span class="p">]</span>
+                        <span class="n">xvar</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">xvar</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="n">site_no</span> <span class="ow">in</span> <span class="n">adjustable</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">adjustable</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="n">site_no</span><span class="p">]</span>
+                        <span class="n">yvar</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">yvar</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="n">site_no</span> <span class="ow">in</span> <span class="n">adjustable</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]:</span>
+                        <span class="n">z</span> <span class="o">=</span> <span class="n">adjustable</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">][</span><span class="n">site_no</span><span class="p">]</span>
+                        <span class="n">zvar</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">zvar</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">site_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">mult</span><span class="p">),</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">xvar</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">yvar</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">zvar</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="n">sites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">site_data</span><span class="p">)</span>
+
+            <span class="n">n_sites</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">site_data</span><span class="p">)</span>
+            <span class="n">max_sites</span> <span class="o">=</span> <span class="n">max_sites</span> <span class="k">if</span> <span class="n">n_sites</span> <span class="o">&lt;</span> <span class="n">max_sites</span> <span class="k">else</span> <span class="n">n_sites</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;Notes&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">description</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot; Structure&quot;</span><span class="p">:</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">10</span><span class="p">]</span>
+            <span class="n">jdata</span><span class="p">[</span><span class="n">prototype</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;prototype&quot;</span><span class="p">:</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;Prototype&quot;</span><span class="p">]),</span>
+                <span class="s2">&quot;n_elements&quot;</span><span class="p">:</span> <span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;# Species&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;n_atoms&quot;</span><span class="p">:</span> <span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;# Atoms&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;pearson_symbol&quot;</span><span class="p">:</span> <span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;Pearson Symbol&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;strukturbericht&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;Struk. Design.&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span>
+                    <span class="k">else</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;Struk. Design.&quot;</span><span class="p">])</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;aflow&quot;</span><span class="p">:</span> <span class="n">prototype</span><span class="p">,</span>
+                <span class="s2">&quot;simple_spacegroup&quot;</span><span class="p">:</span> <span class="n">simple_spacegroup</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;Space Group Symbol&quot;</span><span class="p">]),</span>
+                <span class="s2">&quot;spacegroup&quot;</span><span class="p">:</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;Space Group Symbol&quot;</span><span class="p">]),</span>
+                <span class="s2">&quot;spacegroup_number&quot;</span><span class="p">:</span> <span class="n">pdata</span><span class="p">[</span><span class="s2">&quot;Space Group Number&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+                <span class="s2">&quot;hyperlink&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;http://www.aflowlib.org/CrystalDatabase/</span><span class="si">{</span><span class="n">prototype</span><span class="si">}</span><span class="s2">.html&quot;</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="n">cell_parameters</span><span class="p">,</span>
+                <span class="s2">&quot;sites&quot;</span><span class="p">:</span> <span class="n">site_data</span><span class="p">,</span>
+                <span class="s2">&quot;n_sites&quot;</span><span class="p">:</span> <span class="n">n_sites</span><span class="p">,</span>
+            <span class="p">}</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">jdata</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020-2021, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under awards OAC-1547580
+    and CHE-2136142.
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

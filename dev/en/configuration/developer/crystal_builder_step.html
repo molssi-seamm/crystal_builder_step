@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>crystal_builder_step package &mdash; Crystal Builder Step 2021.10.13+5.gda05a6b documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="crystal_builder_step" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Crystal Builder Step
+          </a>
+              <div class="version">
+                2021.10.13+5.gda05a6b
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">crystal_builder_step</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">crystal_builder_step package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Crystal Builder Step</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Developer Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">crystal_builder_step</a></li>
+      <li class="breadcrumb-item active">crystal_builder_step package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/developer/crystal_builder_step.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="crystal-builder-step-package">
+<h1>crystal_builder_step package<a class="headerlink" href="#crystal-builder-step-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-crystal_builder_step.crystal_builder">
+<span id="crystal-builder-step-crystal-builder-module"></span><h2>crystal_builder_step.crystal_builder module<a class="headerlink" href="#module-crystal_builder_step.crystal_builder" title="Permalink to this heading"></a></h2>
+<p>Non-graphical part of the Crystal Builder step in a SEAMM flowchart</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder.CrystalBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crystal_builder_step.crystal_builder.</span></span><span class="sig-name descname"><span class="pre">CrystalBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Crystal</span> <span class="pre">Builder'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/crystal_builder.html#CrystalBuilder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.crystal_builder.CrystalBuilder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></p>
+<p>The non-graphical part of a Crystal Builder step in a flowchart.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder.CrystalBuilder.parser">
+<span class="sig-name descname"><span class="pre">parser</span></span><a class="headerlink" href="#crystal_builder_step.crystal_builder.CrystalBuilder.parser" title="Permalink to this definition"></a></dt>
+<dd><p>The parser object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>configargparse.ArgParser</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder.CrystalBuilder.options">
+<span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#crystal_builder_step.crystal_builder.CrystalBuilder.options" title="Permalink to this definition"></a></dt>
+<dd><p>It contains a two item tuple containing the populated namespace and the
+list of remaining argument strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder.CrystalBuilder.subflowchart">
+<span class="sig-name descname"><span class="pre">subflowchart</span></span><a class="headerlink" href="#crystal_builder_step.crystal_builder.CrystalBuilder.subflowchart" title="Permalink to this definition"></a></dt>
+<dd><p>A SEAMM Flowchart object that represents a subflowchart, if needed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>seamm.Flowchart</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder.CrystalBuilder.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#crystal_builder_step.crystal_builder.CrystalBuilder.parameters" title="Permalink to this definition"></a></dt>
+<dd><p>The control parameters for Crystal Builder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crystal_builder_step.crystal_builder_parameters.CrystalBuilderParameters" title="crystal_builder_step.crystal_builder_parameters.CrystalBuilderParameters">CrystalBuilderParameters</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkCrystalBuilder</span></code>, <a class="reference internal" href="#crystal_builder_step.crystal_builder.CrystalBuilder" title="crystal_builder_step.crystal_builder.CrystalBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CrystalBuilder</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">CrystalBuilderParameters</span></code></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder.CrystalBuilder.description_text">
+<span class="sig-name descname"><span class="pre">description_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/crystal_builder.html#CrystalBuilder.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.crystal_builder.CrystalBuilder.description_text" title="Permalink to this definition"></a></dt>
+<dd><p>Create the text description of what this step will do.
+The dictionary of control values is passed in as P so that
+the code can test values, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>P</strong> (<em>dict</em>) – An optional dictionary of the current values of the control
+parameters.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>description</strong> – A description of the current step.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder.CrystalBuilder.git_revision">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">git_revision</span></span><a class="headerlink" href="#crystal_builder_step.crystal_builder.CrystalBuilder.git_revision" title="Permalink to this definition"></a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder.CrystalBuilder.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/crystal_builder.html#CrystalBuilder.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.crystal_builder.CrystalBuilder.run" title="Permalink to this definition"></a></dt>
+<dd><p>Run a Crystal Builder step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>next_node</strong> – The next node object in the flowchart.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>seamm.Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder.CrystalBuilder.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#crystal_builder_step.crystal_builder.CrystalBuilder.version" title="Permalink to this definition"></a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-crystal_builder_step.crystal_builder_parameters">
+<span id="crystal-builder-step-crystal-builder-parameters-module"></span><h2>crystal_builder_step.crystal_builder_parameters module<a class="headerlink" href="#module-crystal_builder_step.crystal_builder_parameters" title="Permalink to this heading"></a></h2>
+<p>Control parameters for the Crystal Builder step in a SEAMM flowchart</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder_parameters.CrystalBuilderParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crystal_builder_step.crystal_builder_parameters.</span></span><span class="sig-name descname"><span class="pre">CrystalBuilderParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/crystal_builder_parameters.html#CrystalBuilderParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.crystal_builder_parameters.CrystalBuilderParameters" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></p>
+<p>The control parameters for Crystal Builder.</p>
+<p>The developer will add a dictionary of Parameters to this class.
+The keys are parameters for the current plugin, which themselves
+might be dictionaries.</p>
+<p>You need to replace the ‘time’ example below with one or more
+definitions of the control parameters for your plugin and application.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder_parameters.CrystalBuilderParameters.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><a class="headerlink" href="#crystal_builder_step.crystal_builder_parameters.CrystalBuilderParameters.parameters" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p>‘format_string’, description’, help_text’}</p>
+</div></blockquote>
+<p>A dictionary containing the parameters for the current step.
+Each key of the dictionary is a dictionary that contains the
+the following keys: kind, default, default_units, enumeration,
+format_string, description and help text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>{‘kind’, ‘default’, ‘default_units’, ‘enumeration’,</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parameters['kind']</span></span></dt>
+<dd><p>Specifies the kind of a variable. While the ‘kind’ of a variable might
+be a numeric value, it may still have enumerated custom values
+meaningful to the user. For instance, if the parameter is
+a convergence criterion for an optimizer, custom values like ‘normal’,
+‘precise’, etc, might be adequate. In addition, any
+parameter can be set to a variable of expression, indicated by having
+‘$’ as the first character in the field. For example, $OPTIMIZER_CONV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>custom</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parameters['default']</span></span></dt>
+<dd><p>‘enum’ The default value of the parameter, used to reset it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>‘integer’ or ‘float’ or ‘string’ or ‘boolean’ or</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parameters['default_units']</span></span></dt>
+<dd><p>The default units, used for resetting the value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parameters['enumeration']</span></span></dt>
+<dd><p>A tuple of enumerated values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parameters['format_string']</span></span></dt>
+<dd><p>A format string for ‘pretty’ output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parameters['description']</span></span></dt>
+<dd><p>A short string used as a prompt in the GUI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parameters['help_text']</span></span></dt>
+<dd><p>A longer string to display as help for the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CrystalBuilder</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">TkCrystalBuilder</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">CrystalBuilder</span></code>, <a class="reference internal" href="#crystal_builder_step.crystal_builder_parameters.CrystalBuilderParameters" title="crystal_builder_step.crystal_builder_parameters.CrystalBuilderParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CrystalBuilderParameters</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">Crystal</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<dl>
+<dt>parameters = {</dt><dd><dl class="simple">
+<dt>“time”: {</dt><dd><p>“default”: 100.0,
+“kind”: “float”,
+“default_units”: “ps”,
+“enumeration”: tuple(),
+“format_string”: “.1f”,
+“description”: “Simulation time:”,
+“help_text”: (“The time to simulate in the dynamics run.”)</p>
+</dd>
+</dl>
+<p>},</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'AFLOW</span> <span class="pre">prototype':</span> <span class="pre">{'default':</span> <span class="pre">'',</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'AFLOW</span> <span class="pre">Prototype:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">AFLOW</span> <span class="pre">prototype',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'a':</span> <span class="pre">{'default':</span> <span class="pre">10.0,</span> <span class="pre">'default_units':</span> <span class="pre">'Å',</span> <span class="pre">'description':</span> <span class="pre">'a:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'.2f',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">length</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">first</span> <span class="pre">side</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">cell.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'alpha':</span> <span class="pre">{'default':</span> <span class="pre">90.0,</span> <span class="pre">'default_units':</span> <span class="pre">'degree',</span> <span class="pre">'description':</span> <span class="pre">'alpha:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'.1f',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">angle</span> <span class="pre">between</span> <span class="pre">a</span> <span class="pre">and</span> <span class="pre">b.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'b':</span> <span class="pre">{'default':</span> <span class="pre">10.0,</span> <span class="pre">'default_units':</span> <span class="pre">'Å',</span> <span class="pre">'description':</span> <span class="pre">'b:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'.2f',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">length</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">second</span> <span class="pre">side</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">cell.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'beta':</span> <span class="pre">{'default':</span> <span class="pre">90.0,</span> <span class="pre">'default_units':</span> <span class="pre">'degree',</span> <span class="pre">'description':</span> <span class="pre">'beta:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'.1f',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">angle</span> <span class="pre">between</span> <span class="pre">a</span> <span class="pre">and</span> <span class="pre">c.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'c':</span> <span class="pre">{'default':</span> <span class="pre">10.0,</span> <span class="pre">'default_units':</span> <span class="pre">'Å',</span> <span class="pre">'description':</span> <span class="pre">'c:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'.2f',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">length</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">third</span> <span class="pre">side</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">cell.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'elements':</span> <span class="pre">{'default':</span> <span class="pre">['Al'],</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'Elements:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">elements</span> <span class="pre">at</span> <span class="pre">the</span> <span class="pre">different</span> <span class="pre">sites.',</span> <span class="pre">'kind':</span> <span class="pre">'list'},</span> <span class="pre">'gamma':</span> <span class="pre">{'default':</span> <span class="pre">90.0,</span> <span class="pre">'default_units':</span> <span class="pre">'degree',</span> <span class="pre">'description':</span> <span class="pre">'gamma:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'.1f',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">angle</span> <span class="pre">between</span> <span class="pre">b</span> <span class="pre">and</span> <span class="pre">c.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'n_sites':</span> <span class="pre">{'default':</span> <span class="pre">'any',</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'Number</span> <span class="pre">of</span> <span class="pre">occupied</span> <span class="pre">sites:',</span> <span class="pre">'enumeration':</span> <span class="pre">('any',),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">occupied</span> <span class="pre">sites</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">structure.',</span> <span class="pre">'kind':</span> <span class="pre">'int'},</span> <span class="pre">'prototype':</span> <span class="pre">{'default':</span> <span class="pre">'',</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'Prototype:',</span> <span class="pre">'enumeration':</span> <span class="pre">('place',</span> <span class="pre">'holders'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">prototype</span> <span class="pre">to</span> <span class="pre">use',</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'},</span> <span class="pre">'prototype_group':</span> <span class="pre">{'default':</span> <span class="pre">'common',</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'Which</span> <span class="pre">prototypes:',</span> <span class="pre">'enumeration':</span> <span class="pre">('common',</span> <span class="pre">'Strukturbericht',</span> <span class="pre">'all'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">group</span> <span class="pre">of</span> <span class="pre">prototypes</span> <span class="pre">to</span> <span class="pre">display',</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'}}</span></em><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-crystal_builder_step.crystal_builder_step">
+<span id="crystal-builder-step-crystal-builder-step-module"></span><h2>crystal_builder_step.crystal_builder_step module<a class="headerlink" href="#module-crystal_builder_step.crystal_builder_step" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder_step.CrystalBuilderStep">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crystal_builder_step.crystal_builder_step.</span></span><span class="sig-name descname"><span class="pre">CrystalBuilderStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/crystal_builder_step.html#CrystalBuilderStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.crystal_builder_step.CrystalBuilderStep" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Helper class needed for the stevedore integration.</p>
+<p>This must provide a description() method that returns a dict containing a
+description of this node, and create_node() and create_tk_node() methods
+for creating the graphical and non-graphical nodes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder_step.CrystalBuilderStep.my_description">
+<span class="sig-name descname"><span class="pre">my_description</span></span><a class="headerlink" href="#crystal_builder_step.crystal_builder_step.CrystalBuilderStep.my_description" title="Permalink to this definition"></a></dt>
+<dd><p>A human-readable description of this step. It can be
+several lines long, and needs to be clear to non-expert users.
+It contains the following keys: description, group, name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>{description, group, name}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">my_description['description']</span></span></dt>
+<dd><p>A description of the Crystal Builder step. It must be
+clear to non-experts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">my_description['group']</span></span></dt>
+<dd><p>Which group in the menus to put this step. If the group does
+not exist it will be created. Common groups are ‘Building’,
+‘Calculations’, ‘Control’ and ‘Data’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">my_description['name']</span></span></dt>
+<dd><p>The name of this step, to be displayed in the menus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder_step.CrystalBuilderStep.create_node">
+<span class="sig-name descname"><span class="pre">create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/crystal_builder_step.html#CrystalBuilderStep.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.crystal_builder_step.CrystalBuilderStep.create_node" title="Permalink to this definition"></a></dt>
+<dd><p>Create and return the new node object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flowchart</strong> (<em>seamm.Node</em>) – A non-graphical SEAMM node</p></li>
+<li><p><strong>**kwargs</strong> (<em>keyworded arguments</em>) – Various keyworded arguments such as title, namespace or
+extension representing the title displayed in the flowchart,
+the namespace for the plugins of a subflowchart and
+the extension, respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#crystal_builder_step.crystal_builder.CrystalBuilder" title="crystal_builder_step.crystal_builder.CrystalBuilder">CrystalBuilder</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CrystalBuilder</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder_step.CrystalBuilderStep.create_tk_node">
+<span class="sig-name descname"><span class="pre">create_tk_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/crystal_builder_step.html#CrystalBuilderStep.create_tk_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.crystal_builder_step.CrystalBuilderStep.create_tk_node" title="Permalink to this definition"></a></dt>
+<dd><p>Create and return the graphical Tk node object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>canvas</strong> (<em>tk.Canvas</em>) – The Tk Canvas widget</p></li>
+<li><p><strong>**kwargs</strong> (<em>keyworded arguments</em>) – Various keyworded arguments such as tk_flowchart, node, x, y, w, h
+representing a graphical flowchart object, a non-graphical node for
+a step, and dimensions of the graphical node.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder" title="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder">TkCrystalBuilder</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkCrystalBuilder</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_builder_step.CrystalBuilderStep.description">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/crystal_builder_step.html#CrystalBuilderStep.description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.crystal_builder_step.CrystalBuilderStep.description" title="Permalink to this definition"></a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">my_description</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'description':</span> <span class="pre">'An</span> <span class="pre">interface</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">pyiron</span> <span class="pre">crystal</span> <span class="pre">builder',</span> <span class="pre">'group':</span> <span class="pre">'Building',</span> <span class="pre">'name':</span> <span class="pre">'Crystal</span> <span class="pre">Builder'}</span></em><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-crystal_builder_step.crystal_metadata">
+<span id="crystal-builder-step-crystal-metadata-module"></span><h2>crystal_builder_step.crystal_metadata module<a class="headerlink" href="#module-crystal_builder_step.crystal_metadata" title="Permalink to this heading"></a></h2>
+<p>Non-graphical part of the Crystal Builder step in a SEAMM flowchart</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="crystal_builder_step.crystal_metadata.read_prototypes">
+<span class="sig-prename descclassname"><span class="pre">crystal_builder_step.crystal_metadata.</span></span><span class="sig-name descname"><span class="pre">read_prototypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/crystal_metadata.html#read_prototypes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.crystal_metadata.read_prototypes" title="Permalink to this definition"></a></dt>
+<dd><p>Read data for the AFLOW prototypes</p>
+</dd></dl>
+
+</section>
+<section id="module-crystal_builder_step.parse">
+<span id="crystal-builder-step-parse-module"></span><h2>crystal_builder_step.parse module<a class="headerlink" href="#module-crystal_builder_step.parse" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="crystal_builder_step.parse.download">
+<span class="sig-prename descclassname"><span class="pre">crystal_builder_step.parse.</span></span><span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/parse.html#download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.parse.download" title="Permalink to this definition"></a></dt>
+<dd><p>Download the CIF files from AFLOW</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="crystal_builder_step.parse.formula_subscripts">
+<span class="sig-prename descclassname"><span class="pre">crystal_builder_step.parse.</span></span><span class="sig-name descname"><span class="pre">formula_subscripts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formula</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/parse.html#formula_subscripts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.parse.formula_subscripts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="crystal_builder_step.parse.get_bibtex">
+<span class="sig-prename descclassname"><span class="pre">crystal_builder_step.parse.</span></span><span class="sig-name descname"><span class="pre">get_bibtex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prototype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/parse.html#get_bibtex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.parse.get_bibtex" title="Permalink to this definition"></a></dt>
+<dd><p>Create the BibTex for the prototype</p>
+<p>Example:</p>
+<dl>
+<dt>&#64;article{doi:10.1139/v68-576,</dt><dd><dl class="simple">
+<dt>author = {Knop, Osvald and Reid, K. I. G. and Sutarno and Nakagawa,</dt><dd><p>Yasuaki},</p>
+</dd>
+<dt>title = {Chalkogenides of the transition elements. VI. X-Ray, neutron,</dt><dd><p>and magnetic investigation of the spinels Co3O4, NiCo2O4,
+Co3S4, and NiCo2S4},</p>
+</dd>
+</dl>
+<p>journal = {Canadian Journal of Chemistry},
+volume = {46},
+number = {22},
+pages = {3463-3476},
+year = {1968},</p>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="crystal_builder_step.parse.run">
+<span class="sig-prename descclassname"><span class="pre">crystal_builder_step.parse.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prototypes.xlsx'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/parse.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.parse.run" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="crystal_builder_step.parse.test">
+<span class="sig-prename descclassname"><span class="pre">crystal_builder_step.parse.</span></span><span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/parse.html#test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.parse.test" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-crystal_builder_step.tk_crystal_builder">
+<span id="crystal-builder-step-tk-crystal-builder-module"></span><h2>crystal_builder_step.tk_crystal_builder module<a class="headerlink" href="#module-crystal_builder_step.tk_crystal_builder" title="Permalink to this heading"></a></h2>
+<p>The graphical part of a Crystal Builder step</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">crystal_builder_step.tk_crystal_builder.</span></span><span class="sig-name descname"><span class="pre">TkCrystalBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/tk_crystal_builder.html#TkCrystalBuilder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TkNode</span></code></p>
+<p>The graphical part of a Crystal Builder step in a flowchart.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.namespace">
+<span class="sig-name descname"><span class="pre">namespace</span></span><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.namespace" title="Permalink to this definition"></a></dt>
+<dd><p>The namespace of the current step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.node">
+<span class="sig-name descname"><span class="pre">node</span></span><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.node" title="Permalink to this definition"></a></dt>
+<dd><p>The corresponding node of the non-graphical flowchart</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.dialog">
+<span class="sig-name descname"><span class="pre">dialog</span></span><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.dialog" title="Permalink to this definition"></a></dt>
+<dd><p>The Pmw dialog object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dialog</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.sub_tk_flowchart">
+<span class="sig-name descname"><span class="pre">sub_tk_flowchart</span></span><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.sub_tk_flowchart" title="Permalink to this definition"></a></dt>
+<dd><p>A graphical Flowchart representing a subflowchart</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>TkFlowchart</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">self[widget]</span></span></dt>
+<dd><p>A dictionary of tk widgets built using the information
+contained in Crystal Builder_parameters.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CrystalBuilder</span></code>, <a class="reference internal" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder" title="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkCrystalBuilder</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">CrystalBuilderParameters</span></code></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.create_dialog">
+<span class="sig-name descname"><span class="pre">create_dialog</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/tk_crystal_builder.html#TkCrystalBuilder.create_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.create_dialog" title="Permalink to this definition"></a></dt>
+<dd><p>Create the dialog. A set of widgets will be chosen by default
+based on what is specified in the
+Crystal Builder_parameters module.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.reset_dialog" title="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.reset_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkCrystalBuilder.reset_dialog</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.edit">
+<span class="sig-name descname"><span class="pre">edit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/tk_crystal_builder.html#TkCrystalBuilder.edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.edit" title="Permalink to this definition"></a></dt>
+<dd><p>Present a dialog for editing the Crystal Builder input</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.right_click" title="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.right_click"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkCrystalBuilder.right_click</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.handle_dialog">
+<span class="sig-name descname"><span class="pre">handle_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/tk_crystal_builder.html#TkCrystalBuilder.handle_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.handle_dialog" title="Permalink to this definition"></a></dt>
+<dd><p>Handle the closing of the edit dialog</p>
+<p>What to do depends on the button used to close the dialog. If
+the user closes it by clicking the ‘x’ of the dialog window,
+None is returned, which we take as equivalent to cancel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>result</strong> (<em>None</em><em> or </em><em>str</em>) – The value of this variable depends on what the button
+the user clicked.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.handle_help">
+<span class="sig-name descname"><span class="pre">handle_help</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/tk_crystal_builder.html#TkCrystalBuilder.handle_help"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.handle_help" title="Permalink to this definition"></a></dt>
+<dd><p>Shows the help to the user when click on help button.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.reset_dialog">
+<span class="sig-name descname"><span class="pre">reset_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/tk_crystal_builder.html#TkCrystalBuilder.reset_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.reset_dialog" title="Permalink to this definition"></a></dt>
+<dd><p>Layout the widgets in the dialog.</p>
+<p>The widgets are chosen by default from the information in
+Crystal Builder_parameter.</p>
+<p>This function simply lays them out row by row with
+aligned labels. You may wish a more complicated layout that
+is controlled by values of some of the control parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>widget</strong> – </p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.create_dialog" title="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.create_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkCrystalBuilder.create_dialog</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.right_click">
+<span class="sig-name descname"><span class="pre">right_click</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/crystal_builder_step/tk_crystal_builder.html#TkCrystalBuilder.right_click"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.right_click" title="Permalink to this definition"></a></dt>
+<dd><p>Handles the right click event on the node.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.edit" title="crystal_builder_step.tk_crystal_builder.TkCrystalBuilder.edit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkCrystalBuilder.edit</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-crystal_builder_step">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-crystal_builder_step" title="Permalink to this heading"></a></h2>
+<p>crystal_builder_step
+A step for building crystals in SEAMM</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="crystal_builder_step" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020-2021, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under awards OAC-1547580
+    and CHE-2136142.
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
